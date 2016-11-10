@@ -14,9 +14,11 @@ const Login = ({
     getFieldsValue
   }
 }) => {
-  const {logining} = auth
+  const {logining,username,password,remember} = auth
+  console.log(remember)
   function handleSubmit(e) {
     e.preventDefault();
+
     validateFields((errors) => {
       if (errors) {
         return
@@ -30,7 +32,11 @@ const Login = ({
       //   key: item.key
       // }
       // onOk(data)
-      dispatch({type: 'auth/login', payload: {}})
+      dispatch({type: 'auth/login', payload: {
+        username: fieldsValue['username'] || '',
+        password: fieldsValue['password'] || '',
+        remember: fieldsValue['remember'] || false
+      }})
     })
   }
 
@@ -40,7 +46,8 @@ const Login = ({
         <Spin spinning={logining} tip='登陆中...'>
           <Form onSubmit={handleSubmit}>
             <FormItem>
-              {getFieldDecorator('userName', {
+              {getFieldDecorator('username', {
+                initialValue: username,
                 rules: [
                   {
                     required: true,
@@ -53,6 +60,7 @@ const Login = ({
             </FormItem>
             <FormItem>
               {getFieldDecorator('password', {
+                initialValue: password,
                 rules: [
                   {
                     required: true,
@@ -66,7 +74,7 @@ const Login = ({
             <FormItem>
               {getFieldDecorator('remember', {
                 valuePropName: 'checked',
-                initialValue: true,
+                initialValue: remember === 'true',
               })(
                 <Checkbox>记住密码</Checkbox>
               )}
