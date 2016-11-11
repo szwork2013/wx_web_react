@@ -31,18 +31,18 @@ const WxTaskSearch = ({form,onSearch,form:{getFieldDecorator,validateFields,getF
   return (
     <div>
       <Form inline onSubmit={handleSubmit}>
-        <Form.Item label='微信昵称/姓名：'>
+        <Form.Item label='微信昵称/姓名：' labelCol={{ span:10 }} wrapperCol={{ span: 14 }}>
           {getFieldDecorator('nickName', {
             initialValue: '',
           })(<Input type='tetx'/>)
           }
         </Form.Item>
-        <Form.Item label='发送时间：'>
+        <Form.Item label='发送时间：' labelCol={{ span:6 }} wrapperCol={{ span: 18}}>
           {getFieldDecorator('sendDtm', {
           })(<RangePicker showTime format="YYYY/MM/DD HH:mm:ss" />)
           }
         </Form.Item>
-        <Form.Item label='状态：'>
+        <Form.Item label='状态：' labelCol={{ span:6 }} wrapperCol={{ span: 18 }}>
           {getFieldDecorator('status', {
             initialValue: '',
           })(<Select style={{ width: 150 }}>
@@ -55,9 +55,11 @@ const WxTaskSearch = ({form,onSearch,form:{getFieldDecorator,validateFields,getF
             </Select>)
           }
         </Form.Item>
-        <Button style={{
-          marginRight: '10px'
-        }} type='primary' htmlType='submit'>搜索</Button>
+        <Form.Item>
+          <Button style={{
+            marginLeft: '10px'
+          }} type='primary' htmlType='submit'>搜索</Button>
+        </Form.Item>
       </Form>
       <br/>
     </div>

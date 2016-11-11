@@ -97,7 +97,7 @@ const SubscribeList = ({total, current, loading, dataSource,onPageChange,onOpenM
         loading={loading}
         rowKey={record => record.uid}
         pagination={pagination}
-        scroll={{ x: 1000 }}
+        scroll={{ x: 768 }}
         bordered={true}/>
     </div>
   )

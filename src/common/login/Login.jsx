@@ -15,7 +15,6 @@ const Login = ({
   }
 }) => {
   const {logining,username,password,remember} = auth
-  console.log(remember)
   function handleSubmit(e) {
     e.preventDefault();
 

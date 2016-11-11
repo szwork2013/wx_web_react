@@ -6,6 +6,7 @@ import Login from './common/login/Login'
 import App from './layouts/V2/App'
 import NotFound from './common/not_found'
 import WxTask from './views/wx_task'
+import CusMbr from './views/cus_mbr'
 
 export default function({ history }) {
   function requireAuth(nextState, replace) {
@@ -24,6 +25,7 @@ export default function({ history }) {
           <Route path='/home' component={Home} onEnter={requireAuth}/>
           <Route path="/subscribe" component={Subscribe} onEnter={requireAuth}/>
           <Route path="/wxtask" component={WxTask} onEnter={requireAuth}/>
+          <Route path="/cusmbr" component={CusMbr} onEnter={requireAuth}/>
         </Route>
         <Route path='/login' component={Login}/>
       </Route>

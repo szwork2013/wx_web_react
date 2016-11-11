@@ -21,7 +21,7 @@ const CusTable = ({columns, total, current, loading,pageSize, dataSource,onPageC
         loading={loading}
         rowKey={rowKey}
         pagination={pagination}
-        scroll={{ x: 1000 }}
+        scroll={{ x: 768 }}
         bordered={true}/>
     </div>
   )

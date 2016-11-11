@@ -23,7 +23,7 @@ function checkStatus(response) {
  */
 export default function request(url, options) {
   if(process.env.NODE_ENV === 'production'){
-    url = 'http://119.29.197.107:8080/web/v1/' + url
+    url = 'http://203.195.178.77:9000/web/v1/' + url
   }
   else {
     url = 'http://localhost:8080/web/v1/' + url

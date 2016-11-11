@@ -7,23 +7,35 @@ export default {
   state: {
     menus: [
       {
-        key: 1,
+        key: 1001,
         name: '首页',
         icon: 'home',
         url: '/home',
       },
       {
-        key: 2,
+        key: 1101,
+        name: '商户管理',
+        icon: 'home',
+        childs: [
+          {
+            key: 1102,
+            name: '商户会员',
+            url: 'cusmbr'
+          }
+        ]
+      },
+      {
+        key: 1201,
         name: '微信管理',
         icon: 'android',
         childs: [
           {
-            key: 3,
+            key: 1202,
             name: '微信订阅',
             url: '/subscribe'
           },
           {
-            key: 6,
+            key: 1203,
             name: '微信消息',
             url: '/wxtask'
           }

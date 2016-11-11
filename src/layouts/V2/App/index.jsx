@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import {Affix} from 'antd'
+import {Affix, BackTop } from 'antd'
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import styles from './index.less';
@@ -20,6 +20,7 @@ function App({ children }) {
           </div>
         </div>
       </div>
+      <BackTop/>
     </FreeScrollBar>
   );
 }
