@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react';
-import {Affix, BackTop } from 'antd'
+import React, { PropTypes } from 'react';
+import {Affix, BackTop, Row, Col } from 'antd'
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import styles from './index.less';
@@ -15,9 +15,11 @@ function App({ children }) {
         <div id="main-content-div" className='ant-layout-main'>
           <HeaderBar />
           <NavPath />
-          <div className={styles.container}>
-              {children}
-          </div>
+          <Row className={styles.container}>
+              <Col xs={{ span: 24, offset: 0 }} lg={{ span: 20, offset: 2 }}>
+                {children}
+              </Col>
+          </Row>
         </div>
       </div>
       <BackTop/>
