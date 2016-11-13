@@ -6,7 +6,7 @@ import styles from './index.less';
 import HeaderBar from '../Header'
 import FreeScrollBar from 'react-free-scrollbar'
 import NavPath from '../../NavPath'
-import Footer from '../../Footer'
+import Footer from '../Footer'
 
 function App({ children }) {
   return (
@@ -19,6 +19,12 @@ function App({ children }) {
               <Col xs={{ span: 24, offset: 0 }} lg={{ span: 20, offset: 2 }}>
                 {children}
               </Col>
+          </Row>
+          <br/>
+          <Row>
+            <Col span={24}>
+              <Footer />
+            </Col>
           </Row>
         </div>
       </div>
