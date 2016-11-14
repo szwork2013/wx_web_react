@@ -9,7 +9,7 @@ const CusTable = ({columns, total, current, loading,pageSize, dataSource,onPageC
     onChange: onPageChange,
     current,
     showTotal(total){
-      return `总共 ${total} 条数据`
+      return `每页 ${pagination.pageSize} 条， 总共 ${total} 条数据`
     }
   }
 

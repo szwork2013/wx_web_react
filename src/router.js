@@ -1,35 +1,102 @@
 import React, { PropTypes } from 'react';
 import { Router, Route, IndexRoute, Link, IndexRedirect } from 'dva/router';
-import Subscribe from './views/wx_subscribe/WxSubscribe'
-import Home from './views/home/Home'
-import Login from './common/login/Login'
-import App from './layouts/V2/App'
-import NotFound from './common/not_found'
-import WxTask from './views/wx_task'
-import CusMbr from './views/cus_mbr'
+// import Subscribe from './views/wx_subscribe/WxSubscribe'
+// import Home from './views/home/Home'
+// import Login from './common/login/Login'
+// import App from './layouts/V2/App'
+// import NotFound from './common/not_found'
+// import WxTask from './views/wx_task'
 
-export default function({ history }) {
+export default function({ history, app }) {
   function requireAuth(nextState, replace) {
-      if (!!!localStorage.token && nextState.location.pathname != '/login') {
-        replace({
-          pathname: '/login',
+    if (!!!localStorage.token && nextState.location.pathname != '/login') {
+      replace({
+        pathname: '/login',
+      })
+    }
+  }
+  const routes = [
+    {
+      path: '/login',
+      getComponent(nextState, cb){
+        require.ensure([], (require) => {
+          app.model(require('./models/auth'))
+          cb(null, require('./common/login/Login'))
         })
       }
+    },
+    {
+      path: '/',
+      getComponent(nextState, cb){
+        require.ensure([], (require) => {
+          app.model(require('./models/layout'))
+          cb(null, require('./layouts/V2/App'))
+        })
+      },
+      indexRoute: {
+        onEnter: requireAuth,
+        getComponent(nextState, cb){
+          require.ensure([], (require) => {
+            cb(null, require('./views/home/Home'))
+          })
+        }
+      },
+      childRoutes: [
+        {
+          onEnter: requireAuth,
+          path: '/subscribe',
+          getComponent(nextState, cb){
+            require.ensure([], (require) => {
+              app.model(require('./models/wx_subscribe'))
+              cb(null, require('./views/wx_subscribe/WxSubscribe'))
+            })
+          }
+        },
+        {
+          onEnter: requireAuth,
+          path: '/wxtask',
+          getComponent(nextState, cb){
+            require.ensure([], (require) => {
+              app.model(require('./models/wx_task'))
+              cb(null, require('./views/wx_task'))
+            })
+          }
+        },
+        {
+          onEnter: requireAuth,
+          path: '/cusmbr',
+          getComponent(nextState, cb){
+            require.ensure([], (require) => {
+              app.model(require('./models/cus_mbr'))
+              cb(null, require('./views/cus_mbr'))
+            })
+          }
+        },
+        {
+          path: '*',
+          getComponent(nextState, cb){
+            require.ensure([], (require) => {
+              cb(null, require('./common/not_found'))
+            })
+          }
+        }
+      ]
     }
-
-  return (
-    <Router history={history}>
-      <Route path="/">
-        <IndexRedirect to="/home" />
-        <Route component={App}>
-          <Route path='/home' component={Home} onEnter={requireAuth}/>
-          <Route path="/subscribe" component={Subscribe} onEnter={requireAuth}/>
-          <Route path="/wxtask" component={WxTask} onEnter={requireAuth}/>
-          <Route path="/cusmbr" component={CusMbr} onEnter={requireAuth}/>
-        </Route>
-        <Route path='/login' component={Login}/>
-      </Route>
-      <Route path="*" component={NotFound}/>
-    </Router>
-  );
+  ]
+  return <Router history={history} routes={routes} />
+  // return (
+  //   <Router history={history}>
+  //     <Route path="/">
+  //       <IndexRedirect to="/home" />
+  //       <Route component={App}>
+  //         <Route path='/home' component={getHome} onEnter={requireAuth}/>
+  //         <Route path="/subscribe" component={getSubscribe} onEnter={requireAuth}/>
+  //         <Route path="/wxtask" component={getWxTask} onEnter={requireAuth}/>
+  //         <Route path="/cusmbr" component={getCusMbr} onEnter={requireAuth} />
+  //       </Route>
+  //       <Route path='/login' component={getLogin}/>
+  //     </Route>
+  //     <Route path="*" component={getNotFound}/>
+  //   </Router>
+  // );
 };

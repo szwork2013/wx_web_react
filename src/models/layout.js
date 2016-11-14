@@ -10,7 +10,7 @@ export default {
         key: 1001,
         name: '首页',
         icon: 'home',
-        url: '/home',
+        url: '/',
       },
       {
         key: 1101,

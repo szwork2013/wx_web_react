@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-// const webpack = require('atool-build/lib/webpack');
+const webpack = require('atool-build/lib/webpack');
 
 module.exports = function(webpackConfig, env) {
   webpackConfig.babel.plugins.push('transform-runtime');
@@ -25,13 +25,23 @@ module.exports = function(webpackConfig, env) {
     webpackConfig.devtool = '#eval';
     webpackConfig.babel.plugins.push(['dva-hmr', {
       entries: [
-        './src/index.js',
-      ],
+        './src/index.js'
+      ]
     }]);
   } else {
     webpackConfig.babel.plugins.push('dev-expression');
   }
 
+  webpackConfig.entry = {
+    index: './src/index.js',
+    common: ['moment','lodash']
+  }
+
+  webpackConfig.output = {
+    path: __dirname + '/dist',
+    filename: '[name].js',
+    publicPath: process.env.NODE_ENV === 'production'?'/static/':''
+  }
   // webpackConfig.plugins = webpackConfig.plugins.filter(function(plugin) {
   //   return !(plugin instanceof webpack.optimize.CommonsChunkPlugin);
   // });

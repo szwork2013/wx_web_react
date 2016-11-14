@@ -1,4 +1,5 @@
 import fetch from 'dva/fetch';
+// import fetch from 'whatwg-fetch'
 
 function parseJSON(response) {
   return response.json();
@@ -23,7 +24,8 @@ function checkStatus(response) {
  */
 export default function request(url, options) {
   if(process.env.NODE_ENV === 'production'){
-    url = 'http://203.195.178.77:9000/web/v1/' + url
+    // url = 'http://203.195.178.77:9000/web/v1/' + url
+    url = '/web/v1/' + url
   }
   else {
     url = 'http://localhost:8080/web/v1/' + url

@@ -65,6 +65,9 @@ const Header = ({dispatch, layout}) => {
           <Menu mode="horizontal" className='header-menu' onClick={menuClick}>
             {menu}
             <SubMenu title={< span > <Icon type="user"/>ldd < /span>} >
+              <Menu.Item key="404">
+                <Link to='/404'>404</Link>
+              </Menu.Item>
               <Menu.Item key="setting:1">个人信息</Menu.Item>
               <Menu.Item key="setting:2">密码修改</Menu.Item>
               <Menu.Divider/>
