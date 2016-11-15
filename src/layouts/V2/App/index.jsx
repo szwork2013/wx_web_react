@@ -8,7 +8,7 @@ import HeaderBar from '../Header'
 import NavPath from '../../NavPath'
 import Footer from '../Footer'
 
-function App({ children }) {
+function App({ children,location }) {
   return (
     <div className='ant-layout-aside'>
       <div id="main-content-div" className='ant-layout-main'>
@@ -17,7 +17,7 @@ function App({ children }) {
         </Affix>
         <Row>
           <Col xs={{ span: 24, offset: 0 }} lg={{ span: 22, offset: 1 }}>
-              <NavPath />
+              <NavPath locationInfo={location} />
           </Col>
         </Row>
         <Row className={styles.container}>

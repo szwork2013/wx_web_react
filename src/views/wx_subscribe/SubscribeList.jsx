@@ -11,7 +11,7 @@ const SubscribeList = ({total, current, loading, dataSource,onPageChange,onOpenM
       fixed: 'left',
       width: 48,
       render: (text, record) => (
-        <img src={text} style={{width: 48, height: 48}}/>
+        <img src={text} style={{width: 48, height: 48,borderRadius: '50%'}}/>
       )
     },
     {
@@ -80,7 +80,7 @@ const SubscribeList = ({total, current, loading, dataSource,onPageChange,onOpenM
 
   const pagination = {
     total,
-    pageSize: 5,
+    pageSize: 10,
     defaultCurrent: 1,
     onChange: onPageChange,
     current,

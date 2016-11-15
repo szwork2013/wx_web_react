@@ -8,8 +8,8 @@ const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 const MenuItem = Menu.Item
 
-const Header = ({dispatch, layout}) => {
-  const {menus} = layout
+const Header = ({dispatch, auth}) => {
+  const {menus} = auth
 
   function menuClick(item){
     if(item.key === 'logout'){
@@ -64,7 +64,7 @@ const Header = ({dispatch, layout}) => {
         <div className='ant-layout-header'>
           <Menu mode="horizontal" className='header-menu' onClick={menuClick}>
             {menu}
-            <SubMenu title={< span > <Icon type="user"/>ldd < /span>} >
+            <SubMenu title={<span><Icon type="user"/>ldd</span>} className={styles.user}>
               <Menu.Item key="404">
                 <Link to='/404'>404</Link>
               </Menu.Item>
@@ -81,11 +81,11 @@ const Header = ({dispatch, layout}) => {
 }
 
 Header.propTypes = {
-  layout: PropTypes.object
+  auth: PropTypes.object
 };
 
-function mapStateToProps({layout}) {
-  return {layout}
+function mapStateToProps({auth}) {
+  return {auth}
 }
 
 export default connect(mapStateToProps)(Header)

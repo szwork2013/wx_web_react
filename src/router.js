@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Router, Route, IndexRoute, Link, IndexRedirect } from 'dva/router';
+import { Router } from 'dva/router';
 // import Subscribe from './views/wx_subscribe/WxSubscribe'
 // import Home from './views/home/Home'
 // import Login from './common/login/Login'
@@ -29,7 +29,8 @@ export default function({ history, app }) {
       path: '/',
       getComponent(nextState, cb){
         require.ensure([], (require) => {
-          app.model(require('./models/layout'))
+          app.model(require('./models/auth'))
+          // app.model(require('./models/layout'))
           cb(null, require('./layouts/V2/App'))
         })
       },

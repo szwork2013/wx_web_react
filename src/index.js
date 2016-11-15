@@ -7,9 +7,14 @@ import dva from 'dva';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
+import {message} from 'antd'
 
 // 1. Initialize
-const app = dva();
+const app = dva({
+  onError(e){
+    message.error(e.message, 3);
+  }
+});
 // const app = dva({
 //   history: browserHistory,
 // });

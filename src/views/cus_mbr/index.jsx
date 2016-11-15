@@ -3,6 +3,7 @@ import {connect} from 'dva'
 
 import CusMbrList from './CusMbrList'
 import CusMbrSearch from './CusMbrSearch'
+import MbrTaskModal from './MbrTaskModal'
 
 const CusMbr = ({dispatch, cusmbr}) => {
   const {
@@ -11,7 +12,8 @@ const CusMbr = ({dispatch, cusmbr}) => {
     loading,
     current,
     pageSize,
-    queryParams
+    queryParams,
+    modalVisible
   } = cusmbr
 
   const searchProps = {
@@ -44,6 +46,23 @@ const CusMbr = ({dispatch, cusmbr}) => {
         current: page,
         size: pageSize
       }})
+    },
+    onOpenModal(record){
+      dispatch({type: 'cusmbr/showModal'})
+    }
+  }
+
+  const modalProps = {
+    visible: modalVisible,
+    onOk(){
+      dispatch({
+        type: 'cusmbr/hideModal'
+      })
+    },
+    onCancel(){
+      dispatch({
+        type: 'cusmbr/hideModal'
+      })
     }
   }
 
@@ -51,6 +70,7 @@ const CusMbr = ({dispatch, cusmbr}) => {
     <div>
       <CusMbrSearch {...searchProps}/>
       <CusMbrList {...listProps}/>
+      <MbrTaskModal {...modalProps}/>
     </div>
   )
 }

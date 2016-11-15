@@ -1,7 +1,16 @@
 import request from '../utils/request';
 import qs from 'qs'
 
-export async function query(params) {
-  // return request(`/api/users?${qs.stringify(params)}`)
-  return request(`mark`)
+export async function loginSer(params) {
+  // return request(`/user/login?${qs.stringify(params)}`)
+  // return request(`mark`)
+  return request('user/login', {
+    method: 'post',
+    // mode: "no-cors",
+    headers: {
+      'Accept': 'application/json',
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(params)
+  })
 }

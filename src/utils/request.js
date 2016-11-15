@@ -1,4 +1,6 @@
 import fetch from 'dva/fetch';
+import { hashHistory } from 'dva/router'
+import {message} from 'antd'
 // import fetch from 'whatwg-fetch'
 
 function parseJSON(response) {
@@ -13,6 +15,14 @@ function checkStatus(response) {
   const error = new Error(response.statusText);
   error.response = response;
   throw error;
+}
+
+function parseErrorMessage(data) {
+  const { errcode, errmsg } = data;
+  if (errcode !== 1000) {
+    throw new Error(errmsg);
+  }
+  return data;
 }
 
 /**
@@ -30,13 +40,31 @@ export default function request(url, options) {
   else {
     url = 'http://localhost:8080/web/v1/' + url
   }
+  options = options | {}
+  if(!options){
+    let header = {}
+    if(!options.headers){
+      header = options.headers
+    }
+  }
+  console.log(options);
+  options['headers']
   return fetch(url, options)
     .then(checkStatus)
     .then(parseJSON)
-    .then((data) => ({
-      data
-    }))
-    .catch((err) => ({
-      err
-    }));
+    .then(parseErrorMessage)
+    .then((data) => {
+      return data.data
+    })
+    .catch((err) => {
+      switch (err.message) {
+        case '登录失效':
+          hashHistory.push({pathname: '/login'})
+          break
+        default:
+          message.error(err.message, 3);
+          break
+      }
+      return err
+    });
 }

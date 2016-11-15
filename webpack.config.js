@@ -40,7 +40,7 @@ module.exports = function(webpackConfig, env) {
   webpackConfig.output = {
     path: __dirname + '/dist',
     filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'?'/static/':''
+    publicPath: env !== 'development'?'/static/':''
   }
   // webpackConfig.plugins = webpackConfig.plugins.filter(function(plugin) {
   //   return !(plugin instanceof webpack.optimize.CommonsChunkPlugin);
