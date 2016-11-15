@@ -74,6 +74,7 @@ export default {
       yield put({type: 'logining', payload})
 
       const data = yield call(loginSer, payload)
+      console.log(data);
       // hide()
       if (data) {
         notification['success']({

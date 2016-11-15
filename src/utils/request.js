@@ -40,15 +40,10 @@ export default function request(url, options) {
   else {
     url = 'http://localhost:8080/web/v1/' + url
   }
-  options = options | {}
-  if(!options){
-    let header = {}
-    if(!options.headers){
-      header = options.headers
-    }
-  }
-  console.log(options);
-  options['headers']
+  options = options || {}
+  options.headers = options.headers || {}
+  options.headers['token'] = localStorage.getItem('token')
+
   return fetch(url, options)
     .then(checkStatus)
     .then(parseJSON)
@@ -65,6 +60,6 @@ export default function request(url, options) {
           message.error(err.message, 3);
           break
       }
-      return err
+      return undefined
     });
 }

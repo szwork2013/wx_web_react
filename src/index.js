@@ -11,9 +11,10 @@ import {message} from 'antd'
 
 // 1. Initialize
 const app = dva({
-  onError(e){
-    message.error(e.message, 3);
-  }
+  // onError(e){
+  //   console.log(e);
+  //   message.error(e.message, 3);
+  // }
 });
 // const app = dva({
 //   history: browserHistory,

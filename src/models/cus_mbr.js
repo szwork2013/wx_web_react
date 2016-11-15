@@ -37,13 +37,13 @@ export default {
     *query({payload}, {call,put}) {
       yield put({type: 'showLoading'})
       // yield put({type: 'updateQuery', payload})
-      const {data} = yield call(query, payload)
+      const data = yield call(query, payload)
       if (data) {
         yield put({
           type: 'querySuccess',
           payload: {
-            list: data.data.data,
-            total: data.data.total
+            list: data.data,
+            total: data.total
           }
         })
       }else{
