@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Router } from 'dva/router';
+import {Token} from './utils/constants'
 // import Subscribe from './views/wx_subscribe/WxSubscribe'
 // import Home from './views/home/Home'
 // import Login from './common/login/Login'
@@ -9,7 +10,7 @@ import { Router } from 'dva/router';
 
 export default function({ history, app }) {
   function requireAuth(nextState, replace) {
-    if (!!!localStorage.token && nextState.location.pathname != '/login') {
+    if (!!!localStorage.getItem(Token) && nextState.location.pathname != '/login') {
       replace({
         pathname: '/login',
       })
@@ -70,6 +71,23 @@ export default function({ history, app }) {
             require.ensure([], (require) => {
               app.model(require('./models/cus_mbr'))
               cb(null, require('./views/cus_mbr'))
+            })
+          }
+        },
+        {
+          path: '/map',
+          getComponent(nextState, cb){
+            require.ensure([], (require) => {
+              cb(null, require('./views/map'))
+            })
+          }
+        },
+        {
+          path: '/parkmap',
+          getComponent(nextState, cb){
+            require.ensure([], (require) => {
+              app.model(require('./models/park'))
+              cb(null, require('./views/park_map'))
             })
           }
         },

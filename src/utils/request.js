@@ -1,6 +1,7 @@
 import fetch from 'dva/fetch';
 import { hashHistory } from 'dva/router'
 import {message} from 'antd'
+import {Token} from './constants'
 // import fetch from 'whatwg-fetch'
 
 function parseJSON(response) {
@@ -42,7 +43,7 @@ export default function request(url, options) {
   }
   options = options || {}
   options.headers = options.headers || {}
-  options.headers['token'] = localStorage.getItem('token')
+  options.headers['token'] = localStorage.getItem(Token)
 
   return fetch(url, options)
     .then(checkStatus)
@@ -57,7 +58,8 @@ export default function request(url, options) {
           hashHistory.push({pathname: '/login'})
           break
         default:
-          message.error(err.message, 3);
+          console.log(err.message);
+          message.error('服务器繁忙', 3);
           break
       }
       return undefined

@@ -7,13 +7,13 @@ import dva from 'dva';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
-import {message} from 'antd'
+// import {message} from 'antd'
 
 // 1. Initialize
 const app = dva({
   // onError(e){
   //   console.log(e);
-  //   message.error(e.message, 3);
+  //   message.error('服务器繁忙', 3);
   // }
 });
 // const app = dva({

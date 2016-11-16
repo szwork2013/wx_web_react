@@ -1,6 +1,7 @@
 import { hashHistory } from 'dva/router'
 import {message, notification} from 'antd'
 import {loginSer} from '../services/users'
+import {Token} from '../utils/constants'
 
 export default {
   namespace: 'auth',
@@ -45,6 +46,18 @@ export default {
             url: '/wxtask'
           }
         ]
+      },
+      {
+        key: 1301,
+        name: '百度地图',
+        icon: 'environment-o',
+        url: '/map',
+      },
+      {
+        key: 1401,
+        name: '停车场地图',
+        icon: 'environment-o',
+        url: '/parkmap',
       }
     ]
   },
@@ -74,7 +87,6 @@ export default {
       yield put({type: 'logining', payload})
 
       const data = yield call(loginSer, payload)
-      console.log(data);
       // hide()
       if (data) {
         notification['success']({
@@ -83,7 +95,7 @@ export default {
         })
         // message.success('登陆成功，欢迎使用微信管理', 3)
         yield put({type: 'loginSuccess'})
-        localStorage.setItem('token', data)
+        localStorage.setItem(Token, data)
         hashHistory.push({pathname: '/'})
       }else{
         yield put({type: 'loginSuccess'})
@@ -91,7 +103,7 @@ export default {
       }
     },
     logout(state, action) {
-      localStorage.removeItem('token')
+      localStorage.removeItem(Token)
       hashHistory.push({pathname: '/login'})
     }
   },
