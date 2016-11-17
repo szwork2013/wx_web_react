@@ -1,4 +1,4 @@
-import {getParks} from '../services/park'
+import {getParks, getRegions, getDevices} from '../services/park'
 import {parse} from 'qs'
 import {message} from 'antd'
 
@@ -13,7 +13,11 @@ export default {
     modalVisible: false, //弹出框的显示状态
     modalType: 'create', //弹出框的类型（添加用户，编辑用户）
     queryParams: '',
-    pageSize: 10
+    pageSize: 10,
+    regions: [],
+    currentRegion: '5001',
+    zoomLevel: 13,
+    devices: []
   },
   subscriptions: {
     setup({
@@ -21,9 +25,9 @@ export default {
       history
     }) {
       history.listen(location => {
-        if (location.pathname === '/parkmap') {
+        if (location.pathname === '/districtmap' || location.pathname === '/devicemap' || location.pathname === '/personmap') {
           dispatch({
-            type: 'query',
+            type: 'getRegion',
             payload: {
               query: location.query,
               size: 10
@@ -34,10 +38,14 @@ export default {
     }
   },
   effects: {
-    *query({payload}, {call,put}) {
+    *query({payload}, {call,put,select}) {
       yield put({type: 'showLoading'})
       // yield put({type: 'updateQuery', payload})
-      const data = yield call(getParks, payload)
+      // let reginId = yield select(state => state.currentRegion);
+      // console.log(reginId);
+      const data = yield call(getParks, {
+        query: 'REGION_ID='+payload.currentRegion
+      })
       if (data) {
         yield put({
           type: 'querySuccess',
@@ -52,6 +60,48 @@ export default {
           payload: {
             list: null,
             total: 0,
+          }
+        })
+      }
+    },
+    *getRegion({payload}, {call, put}){
+      const hide = message.loading('正在获取城市信息...', 0);
+      yield put({type: 'showLoading'})
+      // yield put({type: 'updateQuery', payload})
+      const data = yield call(getRegions)
+      if (data) {
+        yield put({
+          type: 'querySuccess',
+          payload: {
+            regions: data
+          }
+        })
+      }else{
+        yield put({
+          type: 'querySuccess',
+          payload: {
+            regions: null
+          }
+        })
+      }
+      hide()
+    },
+    *getDevices({payload}, {call, put}){
+      yield put({type: 'showLoading'})
+      // yield put({type: 'updateQuery', payload})
+      const data = yield call(getDevices)
+      if (data) {
+        yield put({
+          type: 'querySuccess',
+          payload: {
+            devices: data
+          }
+        })
+      }else{
+        yield put({
+          type: 'querySuccess',
+          payload: {
+            devices: null
           }
         })
       }

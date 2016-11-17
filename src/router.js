@@ -17,90 +17,108 @@ export default function({ history, app }) {
     }
   }
   const routes = [
+    // {
+    //   path: '/login',
+    //   getComponent(nextState, cb){
+    //     require.ensure([], (require) => {
+    //       app.model(require('./models/auth'))
+    //       cb(null, require('./common/login/Login'))
+    //     })
+    //   }
+    // },
     {
-      path: '/login',
+      path: '/districtmap',
       getComponent(nextState, cb){
         require.ensure([], (require) => {
-          app.model(require('./models/auth'))
-          cb(null, require('./common/login/Login'))
+          app.model(require('./models/park'))
+          cb(null, require('./views/park_map/district'))
         })
       }
     },
     {
-      path: '/',
+      path: '/devicemap',
       getComponent(nextState, cb){
         require.ensure([], (require) => {
-          app.model(require('./models/auth'))
-          // app.model(require('./models/layout'))
-          cb(null, require('./layouts/V2/App'))
+          app.model(require('./models/park'))
+          cb(null, require('./views/park_map/device'))
         })
-      },
-      indexRoute: {
-        onEnter: requireAuth,
-        getComponent(nextState, cb){
-          require.ensure([], (require) => {
-            cb(null, require('./views/home/Home'))
-          })
-        }
-      },
-      childRoutes: [
-        {
-          onEnter: requireAuth,
-          path: '/subscribe',
-          getComponent(nextState, cb){
-            require.ensure([], (require) => {
-              app.model(require('./models/wx_subscribe'))
-              cb(null, require('./views/wx_subscribe/WxSubscribe'))
-            })
-          }
-        },
-        {
-          onEnter: requireAuth,
-          path: '/wxtask',
-          getComponent(nextState, cb){
-            require.ensure([], (require) => {
-              app.model(require('./models/wx_task'))
-              cb(null, require('./views/wx_task'))
-            })
-          }
-        },
-        {
-          onEnter: requireAuth,
-          path: '/cusmbr',
-          getComponent(nextState, cb){
-            require.ensure([], (require) => {
-              app.model(require('./models/cus_mbr'))
-              cb(null, require('./views/cus_mbr'))
-            })
-          }
-        },
-        {
-          path: '/map',
-          getComponent(nextState, cb){
-            require.ensure([], (require) => {
-              cb(null, require('./views/map'))
-            })
-          }
-        },
-        {
-          path: '/parkmap',
-          getComponent(nextState, cb){
-            require.ensure([], (require) => {
-              app.model(require('./models/park'))
-              cb(null, require('./views/park_map'))
-            })
-          }
-        },
-        {
-          path: '*',
-          getComponent(nextState, cb){
-            require.ensure([], (require) => {
-              cb(null, require('./common/not_found'))
-            })
-          }
-        }
-      ]
-    }
+      }
+    },
+    {
+      path: '/personmap',
+      getComponent(nextState, cb){
+        require.ensure([], (require) => {
+          app.model(require('./models/park'))
+          cb(null, require('./views/park_map/person'))
+        })
+      }
+    },
+    // {
+    //   path: '/',
+    //   getComponent(nextState, cb){
+    //     require.ensure([], (require) => {
+    //       app.model(require('./models/auth'))
+    //       // app.model(require('./models/layout'))
+    //       cb(null, require('./layouts/V2/App'))
+    //     })
+    //   },
+    //   indexRoute: {
+    //     onEnter: requireAuth,
+    //     getComponent(nextState, cb){
+    //       require.ensure([], (require) => {
+    //         cb(null, require('./views/home/Home'))
+    //       })
+    //     }
+    //   },
+    //   childRoutes: [
+    //     {
+    //       onEnter: requireAuth,
+    //       path: '/subscribe',
+    //       getComponent(nextState, cb){
+    //         require.ensure([], (require) => {
+    //           app.model(require('./models/wx_subscribe'))
+    //           cb(null, require('./views/wx_subscribe/WxSubscribe'))
+    //         })
+    //       }
+    //     },
+    //     {
+    //       onEnter: requireAuth,
+    //       path: '/wxtask',
+    //       getComponent(nextState, cb){
+    //         require.ensure([], (require) => {
+    //           app.model(require('./models/wx_task'))
+    //           cb(null, require('./views/wx_task'))
+    //         })
+    //       }
+    //     },
+    //     {
+    //       onEnter: requireAuth,
+    //       path: '/cusmbr',
+    //       getComponent(nextState, cb){
+    //         require.ensure([], (require) => {
+    //           app.model(require('./models/cus_mbr'))
+    //           cb(null, require('./views/cus_mbr'))
+    //         })
+    //       }
+    //     },
+    //     {
+    //       path: '/map',
+    //       getComponent(nextState, cb){
+    //         require.ensure([], (require) => {
+    //           cb(null, require('./views/map'))
+    //         })
+    //       }
+    //     },
+    //     {
+    //       path: '*',
+    //       getComponent(nextState, cb){
+    //         require.ensure([], (require) => {
+    //           cb(null, require('./common/not_found'))
+    //         })
+    //       }
+    //     }
+      // ]
+    // }
   ]
   return <Router history={history} routes={routes} />
   // return (

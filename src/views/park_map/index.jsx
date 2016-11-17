@@ -10,9 +10,16 @@ import PersonMap from './PersonMap'
 import MapSearch from './MapSearch'
 
 const ParkMap = ({dispatch, park}) => {
-  const {list} = park
+  const {list, regions} = park
   const districtProps = {
     parks: list
+  }
+
+  const searchProps = {
+    regions,
+    onSearch(){
+      alert('11')
+    }
   }
 
   const RefreshTab = () => (
@@ -31,7 +38,7 @@ const ParkMap = ({dispatch, park}) => {
 
   return (
     <div>
-      <MapSearch />
+      <MapSearch {...searchProps}/>
       <RefreshTab/>
     </div>
   )
