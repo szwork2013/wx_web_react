@@ -40,7 +40,7 @@ const District = ({dispatch, park}) => {
 	)
 }
 
-District.propTypes = {    
+District.propTypes = {
 	park: PropTypes.object
 }
 
