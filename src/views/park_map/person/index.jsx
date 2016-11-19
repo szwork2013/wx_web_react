@@ -21,6 +21,7 @@ const Person = ({dispatch, park}) => {
 		modalVisible,
 		historyTraffic,
 		onSearch (params) {
+			dispatch({type: 'park/updateQuery', payload: {zoomLevel: 15}})
 			dispatch({type: 'park/getTraffics',	payload: params})
 		},
 		getMoreData (data) {
@@ -32,11 +33,11 @@ const Person = ({dispatch, park}) => {
 	}
 
 	return (
-			<div className={styles.left}>
-					<div className={styles.right}>
-							<PersonMap {...mapProps}/>
+			<div>
+					<div style={{position: 'absolute', left: 0, bottom: 0, right: 300, top: 0}}>
+						<PersonMap {...mapProps}/>
 					</div>
-					<div style={{width: '300px'}}>
+					<div style={{width: '300px', position: 'absolute', bottom: 0, right: 0, top: 0}}>
 							<PersonSearch {...searchProps} />
 					</div>
 					<BackTop />

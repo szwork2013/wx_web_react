@@ -74,7 +74,7 @@ const DeviceSearch = ({devices, regions, onSelChange, currentRegion}) => {
 					<div>
 							<Cascader {...cascaderProps} style={{marginLeft: '10px', marginTop: '10px', width: '90%'}} />
 					</div>
-					<div>
+					<div style={{flex: 1}}>
 						{DeviceUI}
 					</div>
 			</div>

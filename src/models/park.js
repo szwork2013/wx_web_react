@@ -27,31 +27,20 @@ export default {
 		setup ({dispatch, history}) {
 			history.listen(location => {
 				if (location.pathname === '/districtmap' || location.pathname === '/devicemap') {
-					dispatch({
-						type: 'getRegion',
-						payload: {
-							query: location.query,
-							size: 10
-						}
-					})
+					dispatch({type: 'getRegion', payload: {query: location.query,	size: 10}})
 				} else if (location.pathname === '/personmap') {
-					console.log(location.query.begin);
-					let begin = !location.query.begin ? moment() : moment(location.query.begin)
-					let end = !location.query.end ? moment() : moment(location.query.end)
+					let begin = !location.query.startTime ? moment().format() : moment(location.query.startTime).format()
+					let end = !location.query.endTime ? moment().format() : moment(location.query.endTime).format()
+					let query = {
+						carNum: location.query.carNum || '',
+						begin,
+						end
+					}
 					dispatch({
 						type: 'updateQuery',
-						payload: {
-							trafficQuery: {
-								carNum: location.query.carNum,
-								begin,
-								end
-							}
-						}
+						payload: {trafficQuery: query, zoomLevel: 15}
 					})
-					dispatch({
-						type: 'getTraffics',
-						payload: location.query
-					})
+					dispatch({type: 'getTraffics', payload: query})
 				}
 			})
 		}
@@ -63,25 +52,11 @@ export default {
       // yield put({type: 'updateQuery', payload})
       // let reginId = yield select(state => state.currentRegion);
       // console.log(reginId);
-			const data = yield call(getParks, {
-				query: 'REGION_ID=' + payload.currentRegion
-			})
+			const data = yield call(getParks, {query: 'REGION_ID=' + payload.currentRegion})
 			if (data) {
-				yield put({
-					type: 'querySuccess',
-					payload: {
-						list: data.data,
-						total: data.total
-					}
-				})
+				yield put({type: 'querySuccess', payload: {list: data.data,	total: data.total}})
 			} else {
-				yield put({
-					type: 'querySuccess',
-					payload: {
-						list: null,
-						total: 0
-					}
-				})
+				yield put({type: 'querySuccess', payload: {list: null,	total: 0}})
 			}
 			hide()
 		},
@@ -91,19 +66,9 @@ export default {
       // yield put({type: 'updateQuery', payload})
 			const data = yield call(getRegions)
 			if (data) {
-				yield put({
-					type: 'querySuccess',
-					payload: {
-						regions: data
-					}
-				})
+				yield put({type: 'querySuccess', payload: {regions: data}})
 			} else {
-				yield put({
-					type: 'querySuccess',
-					payload: {
-						regions: null
-					}
-				})
+				yield put({type: 'querySuccess', payload: {regions: null}})
 			}
 			hide()
 		},
@@ -111,9 +76,7 @@ export default {
 			const hide = message.loading('正在获取设备信息...', 0)
 			yield put({type: 'showLoading'})
 			// yield put({type: 'updateQuery', payload})
-			const data = yield call(getDevices, {
-				regionID: payload.currentRegion
-			})
+			const data = yield call(getDevices, {regionID: payload.currentRegion})
 			if (data) {
 				yield put({type: 'querySuccess', payload: {devices: data}})
 			} else {

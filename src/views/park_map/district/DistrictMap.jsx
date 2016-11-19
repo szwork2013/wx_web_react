@@ -8,66 +8,64 @@ import _ from 'lodash'
 import styles from './index.less'
 
 class DistrictMap extends Component {
-
-	constructor(props) {
-		super(props);
-		this.id = props.id || 'map';
-		this._allOverlays = [];
-		this.getNewMap = this.getNewMap.bind(this);
+	constructor (props) {
+		super(props)
+		this.id = props.id || 'map'
+		this._allOverlays = []
+		this.getNewMap = this.getNewMap.bind(this)
 		this.removeLabels = this.removeLabels.bind(this)
-		this._center = null;
-		this._zoomLevel = 0;
-    this.parks = props.park.list;
+		this._center = null
+		this._zoomLevel = 0
+		this.parks = props.park.list
 		this.zoomLevel = props.park.zoomLevel
 	}
 
-	componentDidMount() {
-		this._map = new BMap.Map(this.id, {minZoom:8,maxZoom:19,enableMapClick:false});    
+	componentDidMount () {
+		this._map = new BMap.Map(this.id, {minZoom: 8, maxZoom: 19, enableMapClick: false})   
 
-		this._map.centerAndZoom(this.calcCenter(), this.zoomLevel);
-		this._map.addControl(new BMap.NavigationControl());
-    // this._map.enableScrollWheelZoom(true);
+		this._map.centerAndZoom(this.calcCenter(), this.zoomLevel)
+		this._map.addControl(new BMap.NavigationControl())
+		this._map.enableScrollWheelZoom(true)
     // this._map.setCurrentCity("成都");
 
-		const that = this;
+		const that = this
 
 		//moveend，初次加载时，会响应多次，原因待查？
-		this._map.addEventListener("moveend", that.getNewMap);
-		this._map.addEventListener("zoomend", that.getNewMap);
-
+		this._map.addEventListener("moveend", that.getNewMap)
+		this._map.addEventListener("zoomend", that.getNewMap)
 	}
 
-	calcCenter(){
-		let minLng = _.min(this.parks, function(item){
-      return item.LONGITUDE
-    })
-    let maxLng = _.max(this.parks, function(item){
-      return item.LONGITUDE
-    })
-    let minLat = _.min(this.parks, function(item){
-      return item.LATITUDE
-    })
-    let maxLat = _.max(this.parks, function(item){
-      return item.LATITUDE
-    })
+	calcCenter () {
+		let minLng = _.min(this.parks, function (item) {
+			return item.LONGITUDE
+		})
+		let maxLng = _.max(this.parks, function (item) {
+			return item.LONGITUDE
+		})
+		let minLat = _.min(this.parks, function (item) {
+			return item.LATITUDE
+		})
+		let maxLat = _.max(this.parks, function (item) {
+			return item.LATITUDE
+		})
 
-    let lng = 104.724252
-    let lat = 31.465233
+		let lng = 104.724252
+		let lat = 31.465233
 
-    if(minLng && minLat){
-      lng = (minLng.LONGITUDE + maxLng.LONGITUDE) / 2
-      lat = (minLat.LATITUDE + maxLat.LATITUDE) / 2
-    }
+		if (minLng && minLat) {
+			lng = (minLng.LONGITUDE + maxLng.LONGITUDE) / 2
+			lat = (minLat.LATITUDE + maxLat.LATITUDE) / 2
+		}
 		return new BMap.Point(lng, lat)
 	}
 
-	componentDidUpdate() {
-		this.parks = this.props.park.list;
-		this._map.centerAndZoom(this.calcCenter(), this.props.park.zoomLevel);
-		this.getNewMap();
+	componentDidUpdate () {
+		this.parks = this.props.park.list
+		this._map.centerAndZoom(this.calcCenter(), this.props.park.zoomLevel)
+		this.getNewMap()
 	}
 
-	render() {
+	render () {
 		return (
 			<div className={styles.container} id={this.id}>
 			</div>

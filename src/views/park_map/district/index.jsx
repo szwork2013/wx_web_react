@@ -8,42 +8,44 @@ import DistrictSearch from './DistrictSearch'
 import styles from './index.less'
 
 const District = ({dispatch, park}) => {
-    const {list, regions, currentRegion}  = park
+	const {list, regions, currentRegion} = park
 
-    const searchProps = {
-        regions,
-        parks: list,
-        currentRegion,
-        onSelChange(value, options){
-            dispatch({type:'park/updateQuery', payload:{
-                currentRegion: value[value.length-1],
-                zoomLevel: value.length + 12
-            }})
-            dispatch({type:'park/query', payload:{
-                currentRegion: value[value.length-1]
-            }})
-        }
-    }
+	const searchProps = {
+		regions,
+		parks: list,
+		currentRegion,
+		onSelChange (value, options) {
+			dispatch({type: 'park/updateQuery',
+				payload: {
+					currentRegion: value[value.length - 1],
+					zoomLevel: value.length + 12
+				}})
+			dispatch({type: 'park/query',
+				payload: {
+					currentRegion: value[value.length - 1]
+				}})
+		}
+	}
 
-    return (
-        <div className={styles.left}>
-            <div className={styles.right}>
-                <DistrictMap/>
-            </div>
-            <div style={{width: '300px'}}>
-                <DistrictSearch {...searchProps} />
-            </div>
-            <BackTop />
-        </div>
-    )
+	return (
+			<div>
+					<div style={{position: 'absolute', left: 0, bottom: 0, right: 300, top: 0}}>
+						<DistrictMap/>
+					</div>
+					<div style={{width: '300px', position: 'absolute', bottom: 0, right: 0, top: 0}}>
+							<DistrictSearch {...searchProps} />
+					</div>
+					<BackTop />
+			</div>
+	)
 }
 
 District.propTypes = {    
-    park: PropTypes.object
+	park: PropTypes.object
 }
 
-function mapStateToProps({park}){
-    return {park}
+function mapStateToProps ({park}) {
+	return {park}
 }
 
 export default connect(mapStateToProps)(District)

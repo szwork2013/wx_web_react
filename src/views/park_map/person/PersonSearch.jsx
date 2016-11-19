@@ -68,10 +68,10 @@ const PersonSearch = ({getMoreData, historyTraffic, traffics, trafficQuery, onSe
 								{getFieldDecorator('phone', {initialValue: ''})(<Input type='text'/>)}
 							</FormItem>
 							<FormItem label='开始时间：' {...formItemLayout} style={{marginBottom: '12px'}}>
-								{getFieldDecorator('begin', {initialValue: trafficQuery.begin})(<DatePicker showTime allowClear={false} format='YYYY-MM-DD HH:mm' />)}
+								{getFieldDecorator('begin', {initialValue: moment(trafficQuery.begin)})(<DatePicker showTime allowClear={false} format='YYYY-MM-DD HH:mm' />)}
 							</FormItem>
 							<FormItem label='结束时间：' {...formItemLayout} style={{marginBottom: '12px'}}>
-								{getFieldDecorator('end', {initialValue: trafficQuery.end})(<DatePicker showTime allowClear={false} format='YYYY-MM-DD HH:mm' />)}
+								{getFieldDecorator('end', {initialValue: moment(trafficQuery.end)})(<DatePicker showTime allowClear={false} format='YYYY-MM-DD HH:mm' />)}
 							</FormItem>
 							<FormItem wrapperCol={{ span: 18, offset: 6 }} style={{marginBottom: '6px'}}>
 								<Button type='primary' style={{width: '100%'}} onClick={onUserSearch}>查询</Button>

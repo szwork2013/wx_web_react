@@ -22,7 +22,7 @@ class DeviceMap extends Component {
 
 		this._map.centerAndZoom(this.calcCenter(), this.zoomLevel)
 		this._map.addControl(new BMap.NavigationControl())
-    // this._map.enableScrollWheelZoom(true);
+		this._map.enableScrollWheelZoom(true);
     // this._map.setCurrentCity("成都");
 
 		const that = this

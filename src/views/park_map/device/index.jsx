@@ -33,14 +33,14 @@ const Device = ({dispatch, park}) => {
 	}
 
 	return (
-		<div className={styles.left}>
-				<div className={styles.right}>
-						<DeviceMap {...mapProps}/>
-				</div>
-				<div style={{width: '500px'}}>
-						<DeviceSearch {...searchProps} />
-				</div>
-				<BackTop />
+		<div>
+			<div style={{position: 'absolute', left: 0, bottom: 0, right: 500, top: 0}}>
+				<DeviceMap {...mapProps}/>
+			</div>
+			<div style={{width: '500px', position: 'absolute', bottom: 0, right: 0, top: 0}}>
+					<DeviceSearch {...searchProps} />
+			</div>
+			<BackTop />
 		</div>
 	)
 }
