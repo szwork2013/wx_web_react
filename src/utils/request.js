@@ -1,3 +1,5 @@
+'use strict'
+
 import fetch from 'dva/fetch'
 import { hashHistory } from 'dva/router'
 import {message} from 'antd'
@@ -94,7 +96,6 @@ export function remove (url, params, options) {
  */
 export default function request (url, options) {
 	if (process.env.NODE_ENV === 'production') {
-		// url = 'http://203.195.178.77:9000/web/v1/' + url
 		url = '/web/v1/' + url
 	}	else {
 		url = 'http://localhost:8080/web/v1/' + url
@@ -108,6 +109,7 @@ export default function request (url, options) {
 		.then(parseJSON)
 		.then(parseErrorMessage)
 		.then((data) => {
+			console.log(data.data)
 			return data.data
 		})
 		.catch((err) => {

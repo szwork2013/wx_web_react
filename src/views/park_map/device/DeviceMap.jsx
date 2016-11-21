@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 
 import _ from 'lodash'
 import styles from './index.less'
+import parkImg from '../../../assets/img/park.png'
 
 class DeviceMap extends Component {
 
@@ -94,7 +95,7 @@ class DeviceMap extends Component {
 		const myGeo = new BMap.Geocoder()
 		const that = this
 		that.removeLabels()
-		let icon = new BMap.Icon('http://203.195.178.77:9000/static/park.png', new BMap.Size(48, 48))
+		let icon = new BMap.Icon(parkImg, new BMap.Size(32, 32))
 
 		let parkNames = _.uniq(_.map(that.devices, 'parkName'))
 		let parkInfos = []
@@ -127,8 +128,8 @@ class DeviceMap extends Component {
 		parkInfos.map(item => {
 			let point = new BMap.Point(item.lng, item.lat)
 			let marker = new BMap.Marker(point, {icon: icon})
-			let label = new BMap.Label(item.parkName, {offset: new BMap.Size(20, -10)})
-			marker.setLabel(label)
+			// let label = new BMap.Label(item.parkName, {offset: new BMap.Size(20, -10)})
+			// marker.setLabel(label)
       // marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
 			marker.addEventListener('click', function (e) {
 				let p = e.target

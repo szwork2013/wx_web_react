@@ -3,6 +3,8 @@ import {connect} from 'dva'
 
 import _ from 'lodash'
 import styles from './index.less'
+import parkImg from '../../../assets/img/park.png'
+import carImg from '../../../assets/img/car.png'
 
 class PersonMap extends Component {
 	constructor (props) {
@@ -124,7 +126,7 @@ class PersonMap extends Component {
 		const myGeo = new BMap.Geocoder()
 		const that = this
 		that.removeLabels()
-		let icon = new BMap.Icon('http://203.195.178.77:9000/static/person.png', new BMap.Size(48, 48))
+		let icon = new BMap.Icon(parkImg, new BMap.Size(32, 32))
 
 		let parkNames = _.uniq(_.map(that.traffics, 'parkName'))
 		let traffickInfos = []
@@ -143,8 +145,8 @@ class PersonMap extends Component {
 		traffickInfos.map(item => {
 			let point = new BMap.Point(item.lng, item.lat)
 			let marker = new BMap.Marker(point, {icon: icon})
-			let label = new BMap.Label(item.parkName, {offset: new BMap.Size(20, -10)})
-			marker.setLabel(label)
+			// let label = new BMap.Label(item.parkName, {offset: new BMap.Size(20, -10)})
+			// marker.setLabel(label)
 			that._map.addOverlay(marker)
 			that._allOverlays.push(marker)
 		})
@@ -163,7 +165,7 @@ class PersonMap extends Component {
 			that.lushu = new BMapLib.LuShu(that._map, points, {
 				defaultContent: '', //"从天安门到百度大厦"
 				autoView: true, //是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
-				icon: new BMap.Icon('http://203.195.178.77:9000/static/car.png', new BMap.Size(48, 48), {anchor: new BMap.Size(25, 13)}),
+				icon: new BMap.Icon(carImg, new BMap.Size(48, 48), {anchor: new BMap.Size(25, 13)}),
 				speed: 1500,
 				enableRotation: true, //是否设置marker随着道路的走向进行旋转
 				landmarkPois: []

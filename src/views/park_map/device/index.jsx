@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'dva'
-import {BackTop} from 'antd'
+import {BackTop, Button} from 'antd'
 
 import DeviceMap from './DeviceMap'
 import DeviceSearch from './DeviceSearch'
@@ -8,8 +8,14 @@ import DeviceSearch from './DeviceSearch'
 import styles from './index.less'
 
 const Device = ({dispatch, park}) => {
-	const {devices, regions, currentRegion, zoomLevel, loading} = park
-
+	const {devices, regions, currentRegion, zoomLevel, loading, deviceLayoutWidth, btnText} = park
+	const change = () => {
+		dispatch({type: 'park/updateQuery',
+			payload: {
+				deviceLayoutWidth: deviceLayoutWidth === 0 ? 500 : 0,
+				btnText: (deviceLayoutWidth === 0 ? 500 : 0) === 0 ? '展开' : '隐藏'
+			}})
+	}
 	const mapProps = {
 		devices,
 		zoomLevel
@@ -34,10 +40,11 @@ const Device = ({dispatch, park}) => {
 
 	return (
 		<div>
-			<div style={{position: 'absolute', left: 0, bottom: 0, right: 500, top: 0}}>
+			<div style={{position: 'absolute', left: 0, bottom: 0, right: deviceLayoutWidth, top: 0}}>
 				<DeviceMap {...mapProps}/>
+				<Button type='primary' style={{zIndex: 999, position: 'absolute', right: 10, top: 10}} onClick={change}>{btnText}</Button>
 			</div>
-			<div style={{width: '500px', position: 'absolute', bottom: 0, right: 0, top: 0}}>
+			<div style={{width: deviceLayoutWidth, position: 'absolute', bottom: 0, right: 0, top: 0}}>
 					<DeviceSearch {...searchProps} />
 			</div>
 			<BackTop />

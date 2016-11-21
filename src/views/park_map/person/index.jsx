@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'dva'
-import {BackTop} from 'antd'
+import {BackTop, Button} from 'antd'
 
 import PersonMap from './PersonMap'
 import PersonSearch from './PersonSearch'
@@ -8,8 +8,14 @@ import PersonSearch from './PersonSearch'
 import styles from './index.less'
 
 const Person = ({dispatch, park}) => {
-	const {traffics, zoomLevel, trafficQuery, modalVisible, historyTraffic} = park
-
+	const {traffics, zoomLevel, trafficQuery, modalVisible, historyTraffic, layoutWidth, btnText} = park
+	const change = () => {
+		dispatch({type: 'park/updateQuery',
+			payload: {
+				layoutWidth: layoutWidth === 0 ? 300 : 0,
+				btnText: (layoutWidth === 0 ? 300 : 0) === 0 ? '展开' : '隐藏'
+			}})
+	}
 	const mapProps = {
 		traffics,
 		zoomLevel
@@ -34,10 +40,11 @@ const Person = ({dispatch, park}) => {
 
 	return (
 			<div>
-					<div style={{position: 'absolute', left: 0, bottom: 0, right: 300, top: 0}}>
+					<div style={{position: 'absolute', left: 0, bottom: 0, right: layoutWidth, top: 0}}>
 						<PersonMap {...mapProps}/>
+						<Button type='primary' style={{zIndex: 999, position: 'absolute', right: 10, top: 10}} onClick={change}>{btnText}</Button>
 					</div>
-					<div style={{width: '300px', position: 'absolute', bottom: 0, right: 0, top: 0}}>
+					<div style={{width: layoutWidth, position: 'absolute', bottom: 0, right: 0, top: 0}}>
 							<PersonSearch {...searchProps} />
 					</div>
 					<BackTop />

@@ -12,71 +12,33 @@ export default {
 		password: '',
 		remember: true,
 		menus: [
-			{
-				key: 1001,
-				name: '首页',
-				icon: 'home',
-				url: '/'
-			},
-			{
-				key: 1101,
-				name: '商户管理',
-				icon: 'home',
-				childs: [
-					{
-						key: 1102,
-						name: '商户会员',
-						url: '/cusmbr'
-					}
-				]
-			},
+			{key: 1001,	name: '首页',	icon: 'home',	url: '/'},
+			{key: 1101,	name: '商户管理',	icon: 'home',	childs: [{key: 1102, name: '商户会员', url: '/cusmbr'}]},
 			{
 				key: 1201,
 				name: '微信管理',
 				icon: 'android',
 				childs: [
-					{
-						key: 1202,
-						name: '微信订阅',
-						url: '/subscribe'
-					},
-					{
-						key: 1203,
-						name: '微信消息',
-						url: '/wxtask'
-					}
+					{key: 1202,	name: '微信订阅',	url: '/subscribe'},
+					{key: 1203,	name: '微信消息',	url: '/wxtask'}
 				]
 			},
-			{
-				key: 1301,
-				name: '百度地图',
-				icon: 'environment-o',
-				url: '/map'
-			},
-			{
-				key: 1401,
-				name: '停车场地图',
-				icon: 'environment-o',
-				url: '/parkmap'
-			},
-			{
-				key: 1501,
-				name: 'demo',
-				icon: 'android',
-				url: '/demo'
-			}
+			{key: 1501,	name: '订单管理',	icon: 'android', childs: [{key: 1502,	name: '微信订单',	url: '/wxchargeord'}]},
+			// {key: 1301,	name: '百度地图',	icon: 'environment-o', url: '/map'},
+			// {key: 1401,	name: '停车场地图', icon: 'environment-o',	url: '/parkmap'},
+			{key: 1601,	name: 'demo',	icon: 'android', url: '/demo'}
 		]
 	},
 	subscriptions: {
 		setup ({dispatch,	history}) {
 			history.listen(location => {
 				if (location.pathname === '/login') {
-					let remember = localStorage.getItem('remember')
+					let remember = window.localStorage.getItem('remember')
 					dispatch({
 						type: 'loaduser',
 						payload: {
-							username: remember ? (localStorage.getItem('username') || '') : '',
-							password: remember ? (localStorage.getItem('password') || '') : '',
+							username: remember ? (window.localStorage.getItem('username') || '') : '',
+							password: remember ? (window.localStorage.getItem('password') || '') : '',
 							remember: remember || false
 						}
 					})
@@ -94,11 +56,11 @@ export default {
 			if (data) {
 				notification['success']({
 					message: '登录成功',
-					description: '欢迎使用',
+					description: '欢迎使用'
 				})
 				// message.success('登陆成功，欢迎使用微信管理', 3)
 				yield put({type: 'loginSuccess'})
-				localStorage.setItem(Token, data)
+				window.localStorage.setItem(Token, data)
 				hashHistory.push({pathname: '/'})
 			} else {
 				yield put({type: 'loginSuccess'})
@@ -106,7 +68,7 @@ export default {
 			}
 		},
 		logout (state, action) {
-			localStorage.removeItem(Token)
+			window.localStorage.removeItem(Token)
 			hashHistory.push({pathname: '/login'})
 		}
 	},
@@ -117,16 +79,16 @@ export default {
 		logining (state, action) {
 			let remember = action.payload.remember
 			if (remember) {
-				localStorage.setItem('username', action.payload.username)
-				localStorage.setItem('password', action.payload.password)
+				window.localStorage.setItem('username', action.payload.username)
+				window.localStorage.setItem('password', action.payload.password)
 			} else {
-				localStorage.removeItem('username')
-				localStorage.removeItem('password')
+				window.localStorage.removeItem('username')
+				window.localStorage.removeItem('password')
 			}
-			localStorage.setItem('remember', action.payload.remember)
+			window.localStorage.setItem('remember', action.payload.remember)
 			return {...state, ...action.payload, logining: true}
 		},
-		loginSuccess(state, action) {
+		loginSuccess (state, action) {
 			return {...state, logining: false}
 		}
 	}

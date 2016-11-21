@@ -7,6 +7,7 @@ export default {
 		loading: false,
 		modalVisible: false,
 		modalType: 'create',
+		current: 1,
 		total: 0,
 		datas: []
 	},
@@ -24,7 +25,7 @@ export default {
 	effects: {
 		*read ({payload}, {call, put}) {
 			yield put({type: 'showLoading'})
-			const {data} = yield call(read, payload)
+			const data = yield call(read, payload)
 			if (data) {
 				yield put({type: 'success', payload: {datas: data.data, total: data.total}})
 			} else {
@@ -33,7 +34,7 @@ export default {
 		},
 		*create ({payload}, {call, put}) {
 			yield put({type: 'showLoading'})
-			const {data} = yield call(create, payload)
+			const data = yield call(create, payload)
 			if (data) {
 				message.success('保存成功', 3)
 				yield put({type: 'query'})
@@ -43,7 +44,7 @@ export default {
 		},
 		*update ({payload}, {call, put}) {
 			yield put({type: 'showLoading'})
-			const {data} = yield call(update, payload)
+			const data = yield call(update, payload)
 			if (data) {
 				message.success('保存成功', 3)
 				yield put({type: 'query'})
@@ -53,7 +54,7 @@ export default {
 		},
 		*remove ({payload}, {call, put}) {
 			yield put({type: 'showLoading'})
-			const {data} = yield call(remove, payload)
+			const data = yield call(remove, payload)
 			if (data) {
 				message.success('删除成功', 3)
 				yield put({type: 'query'})

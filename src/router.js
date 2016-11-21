@@ -10,7 +10,7 @@ import {Token} from './utils/constants'
 
 export default ({ history, app }) => {
 	function requireAuth (nextState, replace) {
-		if (!!!localStorage.getItem(Token) && nextState.location.pathname !== '/login') {
+		if (!window.localStorage.getItem(Token) && nextState.location.pathname !== '/login') {
 			replace({
 				pathname: '/login'
 			})
@@ -58,7 +58,6 @@ export default ({ history, app }) => {
 			getComponent (nextState, cb) {
 				require.ensure([], (require) => {
 					app.model(require('./models/auth'))
-					// app.model(require('./models/layout'))
 					cb(null, require('./layouts/V2/App'))
 				})
 			},
@@ -114,6 +113,15 @@ export default ({ history, app }) => {
 					getComponent (nextState, cb) {
 						require.ensure([], (require) => {
 							cb(null, require('./views/demo'))
+						})
+					}
+				},
+				{
+					path: '/wxchargeord',
+					getComponent (nextState, cb) {
+						require.ensure([], (require) => {
+							app.model(require('./models/charge'))
+							cb(null, require('./views/charge/wx_charge_ord'))
 						})
 					}
 				},

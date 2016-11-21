@@ -21,7 +21,10 @@ export default {
 		devices: [],
 		traffics: [],
 		trafficQuery: {},
-		historyTraffic: []
+		historyTraffic: [],
+		layoutWidth: 300,
+		deviceLayoutWidth: 500,
+		btnText: '隐藏'
 	},
 	subscriptions: {
 		setup ({dispatch, history}) {

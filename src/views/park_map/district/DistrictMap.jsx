@@ -3,6 +3,8 @@ import {connect} from 'dva'
 
 import _ from 'lodash'
 import styles from './index.less'
+import parkImg from '../../../assets/img/park.png'
+import chargeImg from '../../../assets/img/charge.png'
 
 class DistrictMap extends Component {
 	constructor (props) {
@@ -93,8 +95,9 @@ class DistrictMap extends Component {
 		const myGeo = new BMap.Geocoder()
 		const that = this
 		that.removeLabels()
-		let icon = new BMap.Icon('http://203.195.178.77:9000/static/park.png', new BMap.Size(48, 48))
-		let icon1 = new BMap.Icon('http://203.195.178.77:9000/static/charge.png', new BMap.Size(48, 48))
+
+		let icon = new BMap.Icon(parkImg, new BMap.Size(32, 32))
+		let icon1 = new BMap.Icon(chargeImg, new BMap.Size(32, 32))
 		let opts = {
 			width: 250,     // 信息窗口宽度
 			height: 80,     // 信息窗口高度
@@ -106,8 +109,8 @@ class DistrictMap extends Component {
 		that.parks.map(item => {
 			let point = new BMap.Point(item.LONGITUDE, item.LATITUDE)
 			let marker = new BMap.Marker(point, {icon: (item.RcdType === '停车场' ? icon : icon1)})
-			let label = new BMap.Label(item.PARK_NAME, {offset: new BMap.Size(20, -10)})
-			marker.setLabel(label)
+			// let label = new BMap.Label(item.PARK_NAME, {offset: new BMap.Size(20, -10)})
+			// marker.setLabel(label)
 			// marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
 			marker.addEventListener('click', function (e) {
 				let p = e.target
