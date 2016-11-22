@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 import CusTable from '../../../common/cus_table'
 import moment from 'moment'
 
-const WxChargeOrdList = ({total, loading, current, pageSize, dataSource, onPageCharge}) => {
+const WxChargeOrdList = ({total, loading, current, pageSize, dataSource, onPageChange}) => {
 	const columns = [
 		{
 			title: '订单号',
@@ -29,9 +29,30 @@ const WxChargeOrdList = ({total, loading, current, pageSize, dataSource, onPageC
 			key: 'mbrName'
 		},
 		{
+			title: '手机号',
+			dataIndex: 'mobile',
+			key: 'mobile'
+		},
+		{
 			title: '充值金额',
 			dataIndex: 'amt',
 			key: 'amt'
+		},
+		{
+			title: '支付时间',
+			dataIndex: 'payTime',
+			key: 'payTime',
+			render (text, row) {
+				if (text && text.indexOf('0001-01-01') !== -1) {
+					return ''
+				}
+				var temp = moment(text)
+				if (temp.isValid()) {
+					return temp.format('YYYY-MM-DD HH:mm:ss')
+				} else {
+					return ''
+				}
+			}
 		},
 		{
 			title: '状态',
@@ -58,7 +79,7 @@ const WxChargeOrdList = ({total, loading, current, pageSize, dataSource, onPageC
 		current,
 		loading,
 		dataSource,
-		onPageCharge,
+		onPageChange,
 		columns,
 		pageSize,
 		rowKey: record => record.odrID

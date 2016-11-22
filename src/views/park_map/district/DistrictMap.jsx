@@ -108,37 +108,45 @@ class DistrictMap extends Component {
     //自定义遮盖物
 		that.parks.map(item => {
 			let point = new BMap.Point(item.LONGITUDE, item.LATITUDE)
-			let marker = new BMap.Marker(point, {icon: (item.RcdType === '停车场' ? icon : icon1)})
-			// let label = new BMap.Label(item.PARK_NAME, {offset: new BMap.Size(20, -10)})
-			// marker.setLabel(label)
-			// marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
-			marker.addEventListener('click', function (e) {
-				let p = e.target
-				let point = new BMap.Point(p.getPosition().lng, p.getPosition().lat)
-				let content = ''
-				if (item.RcdType === '停车场') {
-					content = `<div style="background-color:'blue'">
-					<h2 style='margin:0 0 5px 0;padding:0.2em 0'>${item.PARK_NAME}</h2>
-					<p style='margin:0;line-height:1.5;font-size:13px;'>${item.ADDRESS}</p>
-					<p style='margin:0;line-height:1.5;font-size:13px;'>总车位数：${item.BERTH_MAX}</p>
-					<p style='margin:0;line-height:1.5;font-size:13px;'>剩余车位数：${item.BERTH_RES}</p>
-					</div>`
-				} else {
-					content = `<div style="background-color:'blue'">
-					<h2 style='margin:0 0 5px 0;padding:0.2em 0'>${item.PARK_NAME}</h2>
-					<p style='margin:0;line-height:1.5;font-size:13px;'>${item.ADDRESS}</p>
-					<p style='margin:0;line-height:1.5;font-size:13px;'>使用中：${item.BERTH_MAX}</p>
-					<p style='margin:0;line-height:1.5;font-size:13px;'>预约数：${item.ORDER_NUM}</p>
-					<p style='margin:0;line-height:1.5;font-size:13px;'>空闲数：${item.BERTH_RES}</p>
-					</div>`
+
+			var convertor = new BMap.Convertor()
+			var pointArr = []
+			pointArr.push(point)
+			convertor.translate(pointArr, 3, 5, (data) => {
+				if (data.status === 0) {
+					let marker = new BMap.Marker(data.points[0], {icon: (item.RcdType === '停车场' ? icon : icon1)})
+					// let label = new BMap.Label(item.PARK_NAME, {offset: new BMap.Size(20, -10)})
+					// marker.setLabel(label)
+					// marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+					marker.addEventListener('click', function (e) {
+						let p = e.target
+						let point = new BMap.Point(p.getPosition().lng, p.getPosition().lat)
+						let content = ''
+						if (item.RcdType === '停车场') {
+							content = `<div style="background-color:'blue'">
+							<h2 style='margin:0 0 5px 0;padding:0.2em 0'>${item.PARK_NAME}</h2>
+							<p style='margin:0;line-height:1.5;font-size:13px;'>${item.ADDRESS}</p>
+							<p style='margin:0;line-height:1.5;font-size:13px;'>总车位数：${item.BERTH_MAX}</p>
+							<p style='margin:0;line-height:1.5;font-size:13px;'>剩余车位数：${item.BERTH_RES}</p>
+							</div>`
+						} else {
+							content = `<div style="background-color:'blue'">
+							<h2 style='margin:0 0 5px 0;padding:0.2em 0'>${item.PARK_NAME}</h2>
+							<p style='margin:0;line-height:1.5;font-size:13px;'>${item.ADDRESS}</p>
+							<p style='margin:0;line-height:1.5;font-size:13px;'>使用中：${item.BERTH_MAX}</p>
+							<p style='margin:0;line-height:1.5;font-size:13px;'>预约数：${item.ORDER_NUM}</p>
+							<p style='margin:0;line-height:1.5;font-size:13px;'>空闲数：${item.BERTH_RES}</p>
+							</div>`
+						}
+						let infoWindow = new BMap.InfoWindow(content, {
+							width: 300
+						})  // 创建信息窗口对象
+						that._map.openInfoWindow(infoWindow, data.points[0]) //开启信息窗口
+					})
+					that._map.addOverlay(marker)
+					that._allOverlays.push(marker)
 				}
-				let infoWindow = new BMap.InfoWindow(content, {
-					width: 300
-				})  // 创建信息窗口对象
-				that._map.openInfoWindow(infoWindow, point) //开启信息窗口
 			})
-			that._map.addOverlay(marker)
-			that._allOverlays.push(marker)
 		})
 
     // //轨迹

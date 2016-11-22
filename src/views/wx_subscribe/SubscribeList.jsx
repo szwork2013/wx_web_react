@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import {Table, message, Popconfirm, Pagination} from 'antd'
-import moment from 'moment'
 import CusTable from '../../common/cus_table'
+import {formatDate, formatSex, formatSubscribeStatus} from '../../utils'
 
 const SubscribeList = ({total, current, loading, dataSource, onPageChange, onOpenModal}) => {
 	const columns = [
@@ -10,18 +10,13 @@ const SubscribeList = ({total, current, loading, dataSource, onPageChange, onOpe
 			dataIndex: 'wxHeadImgUrl',
 			key: 'wxHeadImgUrl',
 			fixed: 'left',
-			width: 48,
+			width: 32,
 			render: (text, record) => (
 				<img src={text} style={{width: 32, height: 32, borderRadius: '50%'}}/>
 			)
 		},
 		{
-			title: '微信OpenID',
-			dataIndex: 'wxOpenId',
-			key: 'wxOpenId'
-		},
-		{
-			title: '用户昵称',
+			title: '微信昵称',
 			dataIndex: 'wxNickName',
 			key: 'wxNickName'
 		},
@@ -29,45 +24,35 @@ const SubscribeList = ({total, current, loading, dataSource, onPageChange, onOpe
 			title: '性别',
 			dataIndex: 'wxSex',
 			key: 'wxSex',
-			render: (text, record) => {
-				if (text === '1') {
-					return '男'
-				}	else if (text === '2') {
-					return '女'
-				}	else {
-					return '未知'
-				}
-			}
-		},
-		{
-			title: '是否关注',
-			dataIndex: 'subscribed',
-			key: 'subscribed',
-			render: (text, record) => {
-				return text === 'y' ? '是' : '否'
-			}
+			render: (text, record) => (formatSex(text))
 		},
 		{
 			title: '关注时间',
 			dataIndex: 'wxSubscribeTime',
 			key: 'wxSubscribeTime',
-			render: (text, record) => (
-				moment(record.wxSubscribeTime).format('YYYY-MM-DD HH:mm:ss')
-			)
+			render: (text, record) => (formatDate(text))
+		},
+		{
+			title: '取关时间',
+			dataIndex: 'wxUnsubscribeTime',
+			key: 'wxUnsubscribeTime',
+			render: (text, record) => (formatDate(text))
+		},
+		{
+			title: '省份',
+			dataIndex: 'wxProvince',
+			key: 'wxProvince'
+		},
+		{
+			title: '城市',
+			dataIndex: 'wxCity',
+			key: 'wxCity'
 		},
 		{
 			title: '状态',
 			dataIndex: 'status',
 			key: 'status',
-			render: (text, record) => {
-				if (text === 'aa') {
-					return '已绑定'
-				}	else if (text === 'na') {
-					return '未绑定'
-				} else {
-					return '无效'
-				}
-			}
+			render: (text, record) => (formatSubscribeStatus(text))
 		},
 		{
 			title: '操作',

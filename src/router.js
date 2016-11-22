@@ -126,6 +126,15 @@ export default ({ history, app }) => {
 					}
 				},
 				{
+					path: '/vipgift',
+					getComponent (nextState, cb) {
+						require.ensure([], (require) => {
+							app.model(require('./models/vip_gift'))
+							cb(null, require('./views/vip_gift'))
+						})
+					}
+				},
+				{
 					path: '*',
 					getComponent (nextState, cb) {
 						require.ensure([], (require) => {

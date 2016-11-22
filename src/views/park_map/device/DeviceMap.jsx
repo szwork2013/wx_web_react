@@ -127,31 +127,28 @@ class DeviceMap extends Component {
     //自定义遮盖物
 		parkInfos.map(item => {
 			let point = new BMap.Point(item.lng, item.lat)
-			let marker = new BMap.Marker(point, {icon: icon})
 			// let label = new BMap.Label(item.parkName, {offset: new BMap.Size(20, -10)})
 			// marker.setLabel(label)
       // marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
-			marker.addEventListener('click', function (e) {
-				let p = e.target
-				let point = new BMap.Point(p.getPosition().lng, p.getPosition().lat)
 
-				let deviceContent = ''
-				if (item.devices) {
-					item.devices.map(device => {
-						deviceContent += `<p style='margin:0;line-height:1.5;font-size:13px;'>${device.deviceName}：${device.deviceCount}</p>`
+			var convertor = new BMap.Convertor()
+			var pointArr = []
+			pointArr.push(point)
+			convertor.translate(pointArr, 3, 5, (data) => {
+				if (data.status === 0) {
+					let marker = new BMap.Marker(data.points[0], {icon: icon})
+					marker.addEventListener('click', function (e) {
+						let p = e.target
+						let point = new BMap.Point(p.getPosition().lng, p.getPosition().lat)
+						let infoWindow = new BMap.InfoWindow(item.parkName, {
+							width: 300
+						}) // 创建信息窗口对象
+						that._map.openInfoWindow(infoWindow, data.points[0]) //开启信息窗口
 					})
+					that._map.addOverlay(marker)
+					that._allOverlays.push(marker)
 				}
-				let content = `<div style="background-color:'blue'">
-					<h2 style='margin:0 0 5px 0;padding:0.2em 0'>${item.parkName}</h2>
-					${deviceContent}
-					</div>`
-				let infoWindow = new BMap.InfoWindow(content, {
-					width: 300
-				}) // 创建信息窗口对象
-				that._map.openInfoWindow(infoWindow, point) //开启信息窗口
 			})
-			that._map.addOverlay(marker)
-			that._allOverlays.push(marker)
 		})
 	}
 }

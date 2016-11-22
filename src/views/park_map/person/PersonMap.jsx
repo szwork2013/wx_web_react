@@ -144,64 +144,110 @@ class PersonMap extends Component {
     //自定义遮盖物
 		traffickInfos.map(item => {
 			let point = new BMap.Point(item.lng, item.lat)
-			let marker = new BMap.Marker(point, {icon: icon})
-			// let label = new BMap.Label(item.parkName, {offset: new BMap.Size(20, -10)})
-			// marker.setLabel(label)
-			that._map.addOverlay(marker)
-			that._allOverlays.push(marker)
+
+			var convertor = new BMap.Convertor()
+			var pointArr = []
+			pointArr.push(point)
+			convertor.translate(pointArr, 3, 5, (data) => {
+				if (data.status === 0) {
+					let marker = new BMap.Marker(data.points[0], {icon: icon})
+					// let label = new BMap.Label(item.parkName, {offset: new BMap.Size(20, -10)})
+					// marker.setLabel(label)
+					marker.addEventListener('click', function (e) {
+						let p = e.target
+						let point = new BMap.Point(p.getPosition().lng, p.getPosition().lat)
+
+						let deviceContent = ''
+						if (item.devices) {
+							item.devices.map(device => {
+								deviceContent += `<p style='margin:0;line-height:1.5;font-size:13px;'>${device.deviceName}：${device.deviceCount}</p>`
+							})
+						}
+						let content = `<div style="background-color:'blue'">
+							<h2 style='margin:0 0 5px 0;padding:0.2em 0'>${item.parkName}</h2>
+							${deviceContent}
+							</div>`
+						let infoWindow = new BMap.InfoWindow(content, {
+							width: 300
+						}) // 创建信息窗口对象
+						that._map.openInfoWindow(infoWindow, data.points[0]) //开启信息窗口
+					})
+					that._map.addOverlay(marker)
+					that._allOverlays.push(marker)
+				}
+			})
 		})
 
     //轨迹
-		let points = []
+		// let points = []
+		var convertor1 = new BMap.Convertor()
+		var pointArr1 = []
 		traffickInfos.map(item => {
-			points.push(new BMap.Point(item.lng, item.lat))
+			pointArr1.push(new BMap.Point(item.lng, item.lat))
 		})
-		//直线轨迹
-		let polyline = new BMap.Polyline(points, {strokeColor: 'red', strokeWeight: 2, strokeOpacity: 0.8})   //创建折线
-		that._map.addOverlay(polyline)   //增加折线
-		that._allOverlays.push(polyline)
+		// pointArr.push(point)
+		convertor1.translate(pointArr1, 3, 5, (data) => {
+			if (data.status === 0) {
+				//直线轨迹
+				let polyline = new BMap.Polyline(data.points, {strokeColor: 'blue', strokeWeight: 5, strokeOpacity: 0.8})   //创建折线
+				that._map.addOverlay(polyline)   //增加折线
+				that._allOverlays.push(polyline)
+
+				if (traffickInfos.length > 1) {
+					that.lushu = new BMapLib.LuShu(that._map, data.points, {
+						defaultContent: '', //"从天安门到百度大厦"
+						autoView: true, //是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
+						icon: new BMap.Icon(carImg, new BMap.Size(48, 48), {anchor: new BMap.Size(25, 13)}),
+						speed: 1500,
+						enableRotation: true, //是否设置marker随着道路的走向进行旋转
+						landmarkPois: []
+					})
+					that.lushu.start()
+				}
+			}
+		})
 		// that.isInit = false
-		if (traffickInfos.length > 1) {
-			that.lushu = new BMapLib.LuShu(that._map, points, {
-				defaultContent: '', //"从天安门到百度大厦"
-				autoView: true, //是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
-				icon: new BMap.Icon(carImg, new BMap.Size(48, 48), {anchor: new BMap.Size(25, 13)}),
-				speed: 1500,
-				enableRotation: true, //是否设置marker随着道路的走向进行旋转
-				landmarkPois: []
-			})
-			that.lushu.start()
+		// if (traffickInfos.length > 1) {
+		// 	that.lushu = new BMapLib.LuShu(that._map, points, {
+		// 		defaultContent: '', //"从天安门到百度大厦"
+		// 		autoView: true, //是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
+		// 		icon: new BMap.Icon(carImg, new BMap.Size(48, 48), {anchor: new BMap.Size(25, 13)}),
+		// 		speed: 1500,
+		// 		enableRotation: true, //是否设置marker随着道路的走向进行旋转
+		// 		landmarkPois: []
+		// 	})
+		// 	that.lushu.start()
 
-			// // 实例化一个驾车导航用来生成路线
-			// let drv = new BMap.DrivingRoute(that.calcCenter(), {
-			// 	onSearchComplete: function (res) {
-			// 		if (drv.getStatus() === 0 && !that.isInit) {
-			// 			that.isInit = true
-			// 			var plan = res.getPlan(0)
-			// 			var arrPois = []
-			// 			// for (var j = 0; j < plan.getNumRoutes(); j++) {
-			// 			// 	let route = plan.getRoute(j)
-			// 			// 	arrPois = arrPois.concat(route.getPath())
-			// 			// }
-			// 			let points = []
-			// 			traffickInfos.map(item => {
-			// 				points.push(new BMap.Point(item.lng, item.lat))
-			// 			})
-			// 			that._map.setViewport(points)
+		// 	// // 实例化一个驾车导航用来生成路线
+		// 	// let drv = new BMap.DrivingRoute(that.calcCenter(), {
+		// 	// 	onSearchComplete: function (res) {
+		// 	// 		if (drv.getStatus() === 0 && !that.isInit) {
+		// 	// 			that.isInit = true
+		// 	// 			var plan = res.getPlan(0)
+		// 	// 			var arrPois = []
+		// 	// 			// for (var j = 0; j < plan.getNumRoutes(); j++) {
+		// 	// 			// 	let route = plan.getRoute(j)
+		// 	// 			// 	arrPois = arrPois.concat(route.getPath())
+		// 	// 			// }
+		// 	// 			let points = []
+		// 	// 			traffickInfos.map(item => {
+		// 	// 				points.push(new BMap.Point(item.lng, item.lat))
+		// 	// 			})
+		// 	// 			that._map.setViewport(points)
 
-			// 			that.lushu = new BMapLib.LuShu(that._map, points, {
-			// 				defaultContent: '', //"从天安门到百度大厦"
-			// 				autoView: true, //是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
-			// 				icon: new BMap.Icon('http://203.195.178.77:9000/static/car.png', new BMap.Size(48, 48), {anchor: new BMap.Size(25, 13)}),
-			// 				speed: 1000,
-			// 				enableRotation: true //是否设置marker随着道路的走向进行旋转
-			// 			})
-			// 			that.lushu.start()
-			// 		}
-			// 	}
-			// })
-			// drv.search(new BMap.Point(_.first(traffickInfos).lng, _.first(traffickInfos).lat), new BMap.Point(_.last(traffickInfos).lng, _.last(traffickInfos).lat))
-		}
+		// 	// 			that.lushu = new BMapLib.LuShu(that._map, points, {
+		// 	// 				defaultContent: '', //"从天安门到百度大厦"
+		// 	// 				autoView: true, //是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
+		// 	// 				icon: new BMap.Icon('http://203.195.178.77:9000/static/car.png', new BMap.Size(48, 48), {anchor: new BMap.Size(25, 13)}),
+		// 	// 				speed: 1000,
+		// 	// 				enableRotation: true //是否设置marker随着道路的走向进行旋转
+		// 	// 			})
+		// 	// 			that.lushu.start()
+		// 	// 		}
+		// 	// 	}
+		// 	// })
+		// 	// drv.search(new BMap.Point(_.first(traffickInfos).lng, _.first(traffickInfos).lat), new BMap.Point(_.last(traffickInfos).lng, _.last(traffickInfos).lat))
+		// }
 	}
 }
 

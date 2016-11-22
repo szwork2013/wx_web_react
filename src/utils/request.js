@@ -102,7 +102,7 @@ export default function request (url, options) {
 	}
 	options = options || {}
 	options.headers = options.headers || {}
-	options.headers['token'] = localStorage.getItem(Token)
+	options.headers['token'] = window.localStorage.getItem(Token)
 
 	return fetch(url, options)
 		.then(checkStatus)
@@ -113,12 +113,15 @@ export default function request (url, options) {
 			return data.data
 		})
 		.catch((err) => {
+			console.log(err.message)
 			switch (err.message) {
 			case '登录失效':
 				hashHistory.push({pathname: '/login'})
 				break
+			case '数据为空':
+				message.warn('数据为空', 3)
+				break
 			default:
-				console.log(err.message)
 				message.error('服务器繁忙', 3)
 				break
 			}
