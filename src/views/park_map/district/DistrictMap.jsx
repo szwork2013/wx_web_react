@@ -60,6 +60,15 @@ class DistrictMap extends Component {
 	}
 
 	componentDidUpdate () {
+		this._map = new BMap.Map(this.id, {minZoom: 8, maxZoom: 19, enableMapClick: false})
+
+		this._map.centerAndZoom(this.calcCenter(), this.zoomLevel)
+		this._map.addControl(new BMap.NavigationControl())
+		this._map.enableScrollWheelZoom(true)
+    // this._map.setCurrentCity("成都");
+
+		const that = this
+
 		this.parks = this.props.park.list
 		this._map.centerAndZoom(this.calcCenter(), this.props.park.zoomLevel)
 		this.getNewMap()

@@ -26,10 +26,6 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 		})
 	}
 
-	if (isSuccess) {
-		resetFields()
-	}
-
 	const modalProps = {
 		title: type === 'create' ? '新增' : '编辑',
 		visible,
