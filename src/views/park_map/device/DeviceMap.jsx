@@ -29,8 +29,8 @@ class DeviceMap extends Component {
 		const that = this
 
 		//moveend，初次加载时，会响应多次，原因待查？
-		this._map.addEventListener('moveend', that.getNewMap)
-		this._map.addEventListener('zoomend', that.getNewMap)
+		// this._map.addEventListener('moveend', that.getNewMap)
+		// this._map.addEventListener('zoomend', that.getNewMap)
 	}
 
 	calcCenter () {
@@ -140,7 +140,18 @@ class DeviceMap extends Component {
 					marker.addEventListener('click', function (e) {
 						let p = e.target
 						let point = new BMap.Point(p.getPosition().lng, p.getPosition().lat)
-						let infoWindow = new BMap.InfoWindow(item.parkName, {
+						let deviceContent = ''
+						if (item.devices) {
+							item.devices.map(device => {
+								deviceContent += `<p style='margin: 0; line-height: 1.5; font-size: 13ox'>${device.deviceName}：${device.deviceCount}</p>`
+							})
+						}
+						let count = `<div>
+								<h2 style='margin: 0 0 5px 0; padding: 0.2em 0'>${item.parkName}</h2>
+								${deviceContent}
+							</div>`
+
+						let infoWindow = new BMap.InfoWindow(count, {
 							width: 300
 						}) // 创建信息窗口对象
 						that._map.openInfoWindow(infoWindow, data.points[0]) //开启信息窗口

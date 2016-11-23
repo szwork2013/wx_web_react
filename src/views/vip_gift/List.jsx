@@ -5,11 +5,6 @@ import { formatDate } from '../../utils'
 const List = ({total, loading, current, pageSize, dataSource, onPageChange}) => {
 	const columns = [
 		{
-			title: '礼品编码',
-			dataIndex: 'giftCode',
-			key: 'giftCode'
-		},
-		{
 			title: '礼品名称',
 			dataIndex: 'giftName',
 			key: 'giftName'
@@ -47,7 +42,6 @@ const List = ({total, loading, current, pageSize, dataSource, onPageChange}) => 
 			render: (text) => (formatDate(text))
 		}
 	]
-
 	const listProps = {
 		total,
 		current,

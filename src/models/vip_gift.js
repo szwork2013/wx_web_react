@@ -1,4 +1,4 @@
-import {readGifts} from '../services/vip_gift'
+import {readGifts, createGift} from '../services/vip_gift'
 import {message} from 'antd'
 
 export default {
@@ -7,9 +7,13 @@ export default {
 		loading: false,
 		modalVisible: false,
 		modalType: 'create',
+		currentItem: {},
 		current: 1,
 		total: 0,
-		datas: []
+		datas: [],
+		uploadFiles: [],
+		isSaving: false,
+		isSuccess: false
 	},
 	// 界面加载完成时调用
 	subscriptions: {
@@ -24,7 +28,7 @@ export default {
 	// 异步方法
 	effects: {
 		*read ({payload}, {call, put}) {
-			yield put({type: 'showLoading'})
+			yield put({type: 'showLoading', payload})
 			const data = yield call(readGifts, payload)
 			if (data) {
 				yield put({type: 'success', payload: {datas: data.data, total: data.total}})
@@ -33,13 +37,14 @@ export default {
 			}
 		},
 		*create ({payload}, {call, put}) {
-			yield put({type: 'showLoading'})
-			const data = yield call(readGifts, payload)
+			yield put({'type': 'common', payload: {isSaving: true, isSuccess: false}})
+			const data = yield call(createGift, payload)
 			if (data) {
+				yield put({type: 'hideModal', payload: {isSuccess: true}})
 				message.success('保存成功', 3)
-				yield put({type: 'query'})
+				yield put({type: 'read', payload})
 			} else {
-				yield put({type: 'fail', payload: {datas: [], total: 0}})
+				yield put({type: 'fail', payload: {datas: [], total: 0, isSuccess: false}})
 			}
 		},
 		*update ({payload}, {call, put}) {
@@ -78,6 +83,9 @@ export default {
 		},
 		fail (state, action) {
 			return {...state, ...action.payload, loading: false}
+		},
+		common (state, action) {
+			return {...state, ...action.payload}
 		}
 	}
 }

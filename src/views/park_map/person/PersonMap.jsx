@@ -197,7 +197,7 @@ class PersonMap extends Component {
 					that.lushu = new BMapLib.LuShu(that._map, data.points, {
 						defaultContent: '', //"从天安门到百度大厦"
 						autoView: true, //是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
-						icon: new BMap.Icon(carImg, new BMap.Size(48, 48), {anchor: new BMap.Size(25, 13)}),
+						icon: new BMap.Icon(carImg, new BMap.Size(50, 50), {anchor: new BMap.Size(8, 13)}),
 						speed: 1500,
 						enableRotation: true, //是否设置marker随着道路的走向进行旋转
 						landmarkPois: []

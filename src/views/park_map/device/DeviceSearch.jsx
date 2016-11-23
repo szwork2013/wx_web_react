@@ -21,10 +21,10 @@ const DeviceSearch = ({devices, regions, onSelChange, currentRegion}) => {
 		let parkDevices = _.filter(devices, function (chr) {
 			return chr.parkName === item
 		})
-		let deviceModels = _.uniq(_.map(parkDevices, 'model'))
+		let deviceModels = _.uniq(_.map(parkDevices, 'devTypeDes'))
 		deviceModels.map(function (name) {
 			let deviceArr = _.filter(parkDevices, function (chr) {
-				return chr.model === name
+				return chr.devTypeDes === name
 			})
 			let type = _.first(deviceArr)
 			let onlines = 0

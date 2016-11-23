@@ -27,7 +27,7 @@ const Person = ({dispatch, park}) => {
 		modalVisible,
 		historyTraffic,
 		onSearch (params) {
-			dispatch({type: 'park/updateQuery', payload: {zoomLevel: 15}})
+			// dispatch({type: 'park/updateQuery', payload: {zoomLevel: 15}})
 			dispatch({type: 'park/getTraffics',	payload: params})
 		},
 		getMoreData (data) {
@@ -42,7 +42,7 @@ const Person = ({dispatch, park}) => {
 			<div>
 					<div style={{position: 'absolute', left: 0, bottom: 0, right: layoutWidth, top: 0}}>
 						<PersonMap {...mapProps}/>
-						<Button type='primary' style={{zIndex: 999, position: 'absolute', right: 10, top: 10}} onClick={change}>{btnText}</Button>
+						<Button type='primary' style={{zIndex: 999, position: 'absolute', right: 10, top: 10}} size='small' onClick={change}>{btnText}</Button>
 					</div>
 					<div style={{width: layoutWidth, position: 'absolute', bottom: 0, right: 0, top: 0}}>
 							<PersonSearch {...searchProps} />

@@ -8,9 +8,6 @@ const DistrictDevice = ({parkName, devices}) => {
 			title: '设备类型',
 			dataIndex: 'deviceType'
 		}, {
-			title: '设备型号',
-			dataIndex: 'deviceModel'
-		}, {
 			title: '在线',
 			dataIndex: 'onlines',
 			className: 'column'

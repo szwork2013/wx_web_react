@@ -4,6 +4,7 @@ import {connect} from 'dva'
 import _ from 'lodash'
 import styles from './index.less'
 import parkImg from '../../../assets/img/park.png'
+import parkBlueImg from '../../../assets/img/park_blue.png'
 import chargeImg from '../../../assets/img/charge.png'
 
 class DistrictMap extends Component {
@@ -30,8 +31,8 @@ class DistrictMap extends Component {
 		const that = this
 
 		//moveend，初次加载时，会响应多次，原因待查？
-		this._map.addEventListener('moveend', that.getNewMap)
-		this._map.addEventListener('zoomend', that.getNewMap)
+		// this._map.addEventListener('moveend', that.getNewMap)
+		// this._map.addEventListener('zoomend', that.getNewMap)
 	}
 
 	calcCenter () {
@@ -96,8 +97,9 @@ class DistrictMap extends Component {
 		const that = this
 		that.removeLabels()
 
-		let icon = new BMap.Icon(parkImg, new BMap.Size(32, 32))
-		let icon1 = new BMap.Icon(chargeImg, new BMap.Size(32, 32))
+		let iconPark = new BMap.Icon(parkImg, new BMap.Size(32, 32))
+		let iconCharge = new BMap.Icon(chargeImg, new BMap.Size(32, 32))
+		let iconBlue = new BMap.Icon(parkBlueImg, new BMap.Size(32, 32))
 		let opts = {
 			width: 250,     // 信息窗口宽度
 			height: 80,     // 信息窗口高度
@@ -114,7 +116,15 @@ class DistrictMap extends Component {
 			pointArr.push(point)
 			convertor.translate(pointArr, 3, 5, (data) => {
 				if (data.status === 0) {
-					let marker = new BMap.Marker(data.points[0], {icon: (item.RcdType === '停车场' ? icon : icon1)})
+					let tempIcon
+					if (item.RcdType === '停车场') {
+						if (item.PARK_TYPE === '2') tempIcon = iconBlue
+						else tempIcon = iconPark
+					} else {
+						tempIcon = iconCharge
+					}
+
+					let marker = new BMap.Marker(data.points[0], {icon: tempIcon})
 					// let label = new BMap.Label(item.PARK_NAME, {offset: new BMap.Size(20, -10)})
 					// marker.setLabel(label)
 					// marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画

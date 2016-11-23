@@ -5,7 +5,7 @@ import VipGiftSearch from './Search'
 import VipGiftModal from './Modal'
 
 const VipGift = ({dispatch, gift}) => {
-	const {total, loading, current, datas, pageSize} = gift
+	const {total, loading, current, currentItem, modalVisible, modalType, datas, pageSize, uploadFiles, isSaving, isSuccess} = gift
 
 	const listProps = {
 		total,
@@ -30,6 +30,34 @@ const VipGift = ({dispatch, gift}) => {
 					begin: data.begin,
 					end: data.end
 				}})
+		},
+		onAdd () {
+			dispatch({type: 'gift/showModal',
+				payload: {
+					isSaving: false,
+					currentItem: {}
+				}})
+		}
+	}
+
+	const modalProps = {
+		item: modalType === 'create' ? {} : currentItem,
+		type: modalType,
+		uploadFiles,
+		isSaving,
+		isSuccess,
+		visible: modalVisible,
+		onOk (data) {
+			dispatch({type: 'gift/create',
+				payload: {
+					page: 1,
+					pageSize,
+					current: 1,
+					...data
+				}})
+		},
+		onCancel () {
+			dispatch({type: 'gift/hideModal'})
 		}
 	}
 
@@ -37,7 +65,7 @@ const VipGift = ({dispatch, gift}) => {
 		<div>
 			<VipGiftSearch {...searchProps}/>
 			<VipGiftList {...listProps}/>
-			<VipGiftModal/>
+			<VipGiftModal {...modalProps}/>
 		</div>
 	)
 }

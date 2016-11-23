@@ -1,6 +1,6 @@
 'use strict'
 
-import {get} from '../utils/request'
+import {get, post} from '../utils/request'
 
 const url = 'vip/gift'
 
@@ -14,4 +14,16 @@ const url = 'vip/gift'
  */
 export async function readGifts (params) {
 	return get(url, params)
+}
+
+
+/**
+ * gift
+ * 新增礼品
+ * @export
+ * @param {any} params
+ * @returns
+ */
+export async function createGift (params) {
+	return post(url, params)
 }

@@ -98,6 +98,7 @@ export default function request (url, options) {
 	if (process.env.NODE_ENV === 'production') {
 		url = '/web/v1/' + url
 	}	else {
+		// url = 'http://203.195.178.77:9000/web/v1/' + url
 		url = 'http://localhost:8080/web/v1/' + url
 	}
 	options = options || {}
@@ -109,11 +110,15 @@ export default function request (url, options) {
 		.then(parseJSON)
 		.then(parseErrorMessage)
 		.then((data) => {
-			console.log(data.data)
-			return data.data
+			if (process.env.NODE_ENV !== 'production') {
+				console.log(data)
+			}
+			return data.data || true
 		})
 		.catch((err) => {
-			console.log(err.message)
+			if (process.env.NODE_ENV !== 'production') {
+				console.log(err.message)
+			}
 			switch (err.message) {
 			case '登录失效':
 				hashHistory.push({pathname: '/login'})

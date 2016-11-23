@@ -20,9 +20,13 @@ const DistrictSearch = ({parks, regions, onSelChange, currentRegion}) => {
 		let freeLot = 0
 		totalArr.map(item => {
 			freeLot += parseInt(item.BERTH_RES)
-		})    
+		})
+		let type = ''
+		if (item === '0') type = '社区停车场'
+		else if (item === '1') type = '商业停车场'
+		else if (item === '2') type = '路边停车场'
 		districtInfo.push({
-			type: item === '1' ? '社区停车场' : '商业停车场',
+			type,
 			total: totalArr.length,
 			totalLot,
 			freeLot

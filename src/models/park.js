@@ -23,7 +23,7 @@ export default {
 		trafficQuery: {},
 		historyTraffic: [],
 		layoutWidth: 300,
-		deviceLayoutWidth: 500,
+		deviceLayoutWidth: 350,
 		btnText: '隐藏'
 	},
 	subscriptions: {
@@ -89,13 +89,13 @@ export default {
 		},
 		*getTraffics ({payload}, {call, put}) {
 			const hide = message.loading('正在获取轨迹信息...', 0)
-			yield put({type: 'showLoading'})
+			// yield put({type: 'showLoading'})
 			// yield put({type: 'updateQuery', payload})
 			const data = yield call(getTraffics, payload)
 			if (data) {
-				yield put({type: 'querySuccess', payload: {traffics: data}})
+				yield put({type: 'querySuccess', payload: {traffics: data, zoomLevel: 15}})
 			} else {
-				yield put({type: 'querySuccess', payload: {traffics: null}})
+				yield put({type: 'querySuccess', payload: {traffics: null, zoomLevel: 15}})
 			}
 			hide()
 		}
