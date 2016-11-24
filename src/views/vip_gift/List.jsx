@@ -1,8 +1,9 @@
 import React, {PropTypes} from 'react'
+import { Button } from 'antd'
 import CusTable from '../../common/cus_table'
 import { formatDate } from '../../utils'
 
-const List = ({total, loading, current, pageSize, dataSource, onPageChange}) => {
+const List = ({total, loading, current, pageSize, dataSource, onOpen, onPageChange}) => {
 	const columns = [
 		{
 			title: '礼品名称',
@@ -40,6 +41,13 @@ const List = ({total, loading, current, pageSize, dataSource, onPageChange}) => 
 			dataIndex: 'endDate',
 			key: 'endDate',
 			render: (text) => (formatDate(text))
+		},
+		{
+			title: '操作',
+			key: 'oper',
+			width: 50,
+			fixed: 'right',
+			render: (text, row) => (<Button type='primary' size='small' onClick={() => { onOpen(row.giftCode, 'detail') }}>详情</Button>)
 		}
 	]
 	const listProps = {

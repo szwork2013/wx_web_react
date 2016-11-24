@@ -71,7 +71,7 @@ export function put (url, params, options) {
 	options.headers = options.headers || {}
 	options.headers['Accept'] = 'application/json'
 	options.headers['Content-Type'] = 'application/json'
-	options.body = JSON.stringify(params)
+	options.body = params
 	return request(url, options)
 }
 

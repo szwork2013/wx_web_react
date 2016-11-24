@@ -1,5 +1,6 @@
 import {readGifts, createGift} from '../services/vip_gift'
 import {message} from 'antd'
+import _ from 'lodash'
 
 export default {
 	namespace: 'gift',
@@ -27,6 +28,16 @@ export default {
 	},
 	// 异步方法
 	effects: {
+		*readOne ({payload}, {call, put}) {
+			yield put({type: 'showLoading', payload})
+			const data = yield call(readGifts, payload)
+			if (data) {
+				let temp = _.first(data.data)
+				yield put({type: 'success', payload: {currentItem: temp}})
+			} else {
+				yield put({type: 'fail', payload: {currentItem: {}}})
+			}
+		},
 		*read ({payload}, {call, put}) {
 			yield put({type: 'showLoading', payload})
 			const data = yield call(readGifts, payload)
@@ -42,7 +53,12 @@ export default {
 			if (data) {
 				yield put({type: 'hideModal', payload: {isSuccess: true}})
 				message.success('保存成功', 3)
-				yield put({type: 'read', payload})
+				yield put({type: 'read',
+					payload: {
+						page: 1,
+						pageSize: payload.pageSize,
+						current: 1
+					}})
 			} else {
 				yield put({type: 'fail', payload: {datas: [], total: 0, isSuccess: false}})
 			}
@@ -86,6 +102,9 @@ export default {
 		},
 		common (state, action) {
 			return {...state, ...action.payload}
+		},
+		handleUpload (state, action) {
+			return {...state, uploadFiles: action.payload.info.fileList}
 		}
 	}
 }

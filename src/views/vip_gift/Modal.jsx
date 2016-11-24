@@ -5,8 +5,9 @@ const Option = Select.Option
 const RangePicker = DatePicker.RangePicker
 import styles from './index.less'
 import moment from 'moment'
+import _ from 'lodash'
 
-const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess, uploadFiles, form, form: {
+const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess, onUpload, uploadFiles, giftTypes, getWays, form, form: {
 	resetFields,
 	getFieldDecorator,
 	validateFields,
@@ -17,12 +18,19 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 			if (errors) {
 				return
 			}
+			const upFile = _.first(uploadFiles)
 			const fieldsValue = getFieldsValue()
+			const rangeDateValue = fieldsValue['rangeDate']
 			const data = {
-				...getFieldsValue()
+				...getFieldsValue(),
+				vldDays: fieldsValue['vldDays'] ? fieldsValue['vldDays'].format() : '',
+				begDate: rangeDateValue[0] ? rangeDateValue[0].format() : '',
+				endDate: rangeDateValue[1] ? rangeDateValue[1].format() : '',
+				status: fieldsValue['status'] ? 'aa' : 'nn',
+				giftPic: upFile.response.url
 			}
-			
 			onOk(data)
+			resetFields()
 		})
 	}
 
@@ -31,7 +39,6 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 		visible,
 		// onOk: handleOk,
 		onCancel,
-		width: 700,
 		maskClosable: false,
 		footer: [
 			<Button key='back' type='ghost' size='large' onClick={onCancel}>取消</Button>,
@@ -44,26 +51,18 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 		labelCol: {span: 8},
 		wrapperCol: {span: 16}
 	}
-	const onUploadChange = info => {
-		if (info.file.status !== 'uploading') {
-			console.log(info.file, info.fileList)
-		}
-		if (info.file.status === 'done') {
-			console.log(`${info.file.name} file uploaded successfully`)
-		} else if (info.file.status === 'error') {
-			console.log(`${info.file.name} file upload failed.`)
-		}
-	}
+
 	let url
 	if (process.env.NODE_ENV === 'production') {
-		url = '/web/v1/' + url
+		url = '/com/file'
 	}	else {
-		url = 'http://localhost:8080/web/v1/' + url
+		url = 'http://localhost:8080/com/file'
 	}
 	const uploadProps = {
 		action: url,
 		accept: '.jpg,.png,.gif,.bmp,.jpeg',
-		listType: 'picture'
+		listType: 'picture',
+		onChange: onUpload
 	}
 	const handleEvent = e => {
 		if (!e || !e.fileList) {
@@ -74,126 +73,169 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 		return fileList
 	}
 
+	const GiftTypeOptions = giftTypes.map(item => {
+		return (
+			<Option key={item.itemcode} value={item.itemcode}>{item.itemname}</Option>
+		)
+	})
+	const GetWayOptions = getWays.map(item => {
+		return (
+			<Option key={item.itemcode} value={item.itemcode}>{item.itemname}</Option>
+		)
+	})
+	// const checkPic = (rule, value, callback) => {
+	// 	if (!uploadFiles || uploadFiles.length === 0) {
+	// 		callback('请上传图片')
+	// 	} else {
+	// 		callback()
+	// 	}
+	// }
+
 	return (
 		<Modal {...modalProps}>
 			<Form horizontal>
 				<Row>
 					<Col span={12}>
 						<FormItem label='礼品名称：' {...formItemLayout}>
-							{getFieldDecorator('giftName', {
-								initialValue: item.giftName,
-								rules: [
-									{required: true, message: '礼品名称不能为空'}
-								]
-							})(<Input type='text' style={{width: '100%'}}/>)}
+							{
+								type === 'detail' ? <label>{item.giftName}</label> : getFieldDecorator('giftName', {
+									initialValue: item.giftName,
+									rules: [
+										{required: true, message: '礼品名称不能为空'}
+									]
+								})(<Input type='text' style={{width: '100%'}}/>)
+							}
 						</FormItem>
 					</Col>
 					<Col span={12}>
 						<FormItem label='礼品类别：' {...formItemLayout}>
-							{getFieldDecorator('giftType', {
-								initialValue: item.giftType || '实物礼品',
-								rules: [
-									{required: true, message: '礼品类别不能为空'}
-								]
-							})(
-								<Select style={{width: '100%'}}>
-									<Option value='实物礼品'>实物礼品</Option>
-									<Option value='电子卷'>电子卷</Option>
-								</Select>
-							)}
+							{
+								type === 'detail' ? <label>{item.giftType}</label> : getFieldDecorator('giftType', {
+									initialValue: item.giftType || '001',
+									rules: [
+										{required: true, message: '礼品类别不能为空'}
+									]
+								})(
+									<Select style={{width: '100%'}}>
+										{GiftTypeOptions}
+									</Select>
+								)
+							}
 						</FormItem>
 					</Col>
 				</Row>
 				<Row>
 					<Col span={12}>
 						<FormItem label='送达方式：' {...formItemLayout}>
-							{getFieldDecorator('getWay', {
-								initialValue: item.getWay || '自动到帐',
-								rules: [
-									{required: true, message: '送达方式不能为空'}
-								]
-							})(
-								<Select style={{width: '100%'}}>
-									<Option value='自动到帐'>自动到帐</Option>
-									<Option value='到店领取'>到店领取</Option>
-									<Option value='邮寄'>邮寄</Option>
-								</Select>
-							)}
+							{
+								type === 'detail' ? <label>{item.getWay}</label> : getFieldDecorator('getWay', {
+									initialValue: item.getWay || '001',
+									rules: [
+										{required: true, message: '送达方式不能为空'}
+									]
+								})(
+									<Select style={{width: '100%'}}>
+										{GetWayOptions}
+									</Select>
+								)
+						}
 						</FormItem>
 					</Col>
 					<Col span={12}>
 						<FormItem label='电子卷效期：' {...formItemLayout}>
-							{getFieldDecorator('vldDays', {
-								initialValue: moment(item.vldDays)
-							})(<DatePicker style={{width: '100%'}}/>)}
+							{
+								type === 'detail' ? <label>{moment(item.vldDays).format('YYYY-MM-DD')}</label> : getFieldDecorator('vldDays', {
+									initialValue: item.vldDays ? moment(item.vldDays) : null
+								})(<DatePicker style={{width: '100%'}} format='YYYY-MM-DD'/>)
+							}
 						</FormItem>
 					</Col>
 				</Row>
 				<Row>
 					<Col span={12}>
 						<FormItem label='礼品价值：' {...formItemLayout}>
-							{getFieldDecorator('giftAmt', {
-								initialValue: item.giftAmt || '',
-								rules: [
-									{type: 'number', required: true, message: '礼品价值不能为空'}
-								]
-							})(<InputNumber min={1} max={99999} style={{width: '100%'}}/>)}
+							{
+								type === 'detail' ? <label>{item.giftAmt}</label> : getFieldDecorator('giftAmt', {
+									initialValue: item.giftAmt || 0,
+									rules: [
+										{type: 'number', required: true, message: '礼品价值不能为空'}
+									]
+								})(<InputNumber min={1} max={99999} style={{width: '100%'}}/>)
+							}
 						</FormItem>
 					</Col>
 					<Col span={12}>
 						<FormItem label='消耗积分：' {...formItemLayout}>
-							{getFieldDecorator('scoreNeed', {
-								initialValue: item.scoreNeed || '',
-								rules: [
-									{type: 'number', required: true, message: '消耗积分不能为空'}
-								]
-							})(<InputNumber style={{width: '100%'}}/>)}
+							{
+								type === 'detail' ? <label>{item.scoreNeed}</label> : getFieldDecorator('scoreNeed', {
+									initialValue: item.scoreNeed || 0,
+									rules: [
+										{type: 'number', required: true, message: '消耗积分不能为空'}
+									]
+								})(<InputNumber min={1} max={99999} style={{width: '100%'}}/>)
+							}
 						</FormItem>
 					</Col>
 				</Row>
 				<Row>
 					<Col span={12}>
 						<FormItem label='可兑数量：' {...formItemLayout}>
-							{getFieldDecorator('stkQty', {
-								initialValue: item.stkQty || '',
-								rules: [
-									{type: 'number', required: true, message: '可兑数量不能为空'}
-								]
-							})(<InputNumber style={{width: '100%'}}/>)}
+							{
+								type === 'detail' ? <label>{item.stkQty}</label> : getFieldDecorator('stkQty', {
+									initialValue: item.stkQty || 0,
+									rules: [
+										{type: 'number', required: true, message: '可兑数量不能为空'}
+									]
+								})(<InputNumber min={1} max={99999} style={{width: '100%'}}/>)
+							}
 						</FormItem>
 					</Col>
 				</Row>
 				<Row>
 					<Col span={16}>
 						<FormItem label='发放时间段：' labelCol={{span: 6}} wrapperCol={{span: 18}}>
-							{getFieldDecorator('rangeDate', {
-								initialValue: [item.beginDate, item.endDate],
-								rules: [
-									{type: 'array', required: true, message: '发放时间段不能为空'}
-								]
-							})(<RangePicker showTime style={{width: '100%'}} format='YYYY-MM-DD HH:mm:ss'/>)}
+							{
+								type === 'detail' ? <label>{moment(item.begDate).format('YYYY-MM-DD HH:mm:ss')}至{moment(item.endDate).format('YYYY-MM-DD HH:mm:ss')}</label> : getFieldDecorator('rangeDate', {
+									initialValue: (item.begDate && item.endDate) ? [moment(item.begDate), moment(item.endDate)] : null,
+									rules: [
+										{type: 'array', required: true, message: '发放时间段不能为空'}
+									]
+								})(<RangePicker showTime style={{width: '100%'}} format='YYYY-MM-DD HH:mm:ss'/>)
+							}
 						</FormItem>
 					</Col>
-					<Col span={6}>
-						<FormItem label='图片上传：' labelCol={{span: 12}} wrapperCol={{span: 12}}>
-							{getFieldDecorator('giftPic', {
-								valuePropName: 'fileList',
-								initialValue: uploadFiles,
-								getValueFromEvent: handleEvent,
-								onChange: onUploadChange
-							})(
-								<Upload {...uploadProps}>
-									<Button type='ghost'>
-										<Icon type='upload' /> 上传
-									</Button>
-								</Upload>)}
+				</Row>
+				<Row>
+					<Col span={12}>
+						<FormItem label='图片上传' {...formItemLayout}>
+							{
+								type === 'detail' ? <img src={'http://localhost:8080' + item.giftPic} style={{maxWidth: '100%'}}/> : getFieldDecorator('giftPic', {
+									valuePropName: 'fileList',
+									initialValue: uploadFiles,
+									getValueFromEvent: handleEvent,
+									rules: [
+										{type: 'array', required: true, message: '请上传图片'}
+									]
+								})(
+									<Upload {...uploadProps}>
+											<Button type='ghost'>
+												<Icon type='upload' /> 上传
+											</Button>
+									</Upload>
+								)
+							}
 						</FormItem>
 					</Col>
 				</Row>
 				<Row>
 					<Col span={12}>
 						<FormItem label='状态：' {...formItemLayout}>
-							{getFieldDecorator('status')(<Checkbox/>)}
+							{
+								type === 'detail' ? <label>{item.status === 'aa' ? '启用' : '停用'}</label> : getFieldDecorator('status', {
+									valuePropName: 'checked',
+									initialValue: !item.status || item.status === 'aa'
+								})(<Checkbox/>)
+							}
 						</FormItem>
 					</Col>
 				</Row>

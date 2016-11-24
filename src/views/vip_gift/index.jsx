@@ -4,9 +4,9 @@ import VipGiftList from './List'
 import VipGiftSearch from './Search'
 import VipGiftModal from './Modal'
 
-const VipGift = ({dispatch, gift}) => {
+const VipGift = ({dispatch, gift, common}) => {
 	const {total, loading, current, currentItem, modalVisible, modalType, datas, pageSize, uploadFiles, isSaving, isSuccess} = gift
-
+	const {giftTypes, getWays} = common
 	const listProps = {
 		total,
 		loading,
@@ -15,10 +15,21 @@ const VipGift = ({dispatch, gift}) => {
 		dataSource: datas,
 		onPageChange (page) {
 			dispatch({type: 'gift/read',	payload: {page,	pageSize,	current: page}})
+		},
+		onOpen (id, type) {
+			dispatch({type: 'common/getGiftTypeItems'})
+			dispatch({type: 'common/getGetWayItems'})
+			dispatch({type: 'gift/readOne'})
+			dispatch({type: 'gift/showModal',
+				payload: {
+					isSaving: false,
+					modalType: 'detail'
+				}})
 		}
 	}
 
 	const searchProps = {
+		giftTypes,
 		onSearch (data) {
 			dispatch({type: 'gift/read',
 				payload: {
@@ -32,9 +43,12 @@ const VipGift = ({dispatch, gift}) => {
 				}})
 		},
 		onAdd () {
+			dispatch({type: 'common/getGiftTypeItems'})
+			dispatch({type: 'common/getGetWayItems'})
 			dispatch({type: 'gift/showModal',
 				payload: {
 					isSaving: false,
+					modalType: 'create',
 					currentItem: {}
 				}})
 		}
@@ -46,18 +60,21 @@ const VipGift = ({dispatch, gift}) => {
 		uploadFiles,
 		isSaving,
 		isSuccess,
+		giftTypes,
+		getWays,
 		visible: modalVisible,
 		onOk (data) {
 			dispatch({type: 'gift/create',
 				payload: {
-					page: 1,
 					pageSize,
-					current: 1,
 					...data
 				}})
 		},
 		onCancel () {
 			dispatch({type: 'gift/hideModal'})
+		},
+		onUpload (info) {
+			dispatch({type: 'gift/handleUpload', payload: {info}})
 		}
 	}
 
@@ -71,11 +88,12 @@ const VipGift = ({dispatch, gift}) => {
 }
 
 VipGift.propTypes = {
-	gift: PropTypes.object.isRequired
+	gift: PropTypes.object.isRequired,
+	common: PropTypes.object.isRequired
 }
 
-const mapStateToProps = ({gift}) => {
-	return {gift}
+const mapStateToProps = ({gift, common}) => {
+	return {gift, common}
 }
 
 export default connect(mapStateToProps)(VipGift)

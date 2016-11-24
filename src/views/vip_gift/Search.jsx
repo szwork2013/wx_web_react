@@ -5,7 +5,7 @@ const FormItem = Form.Item
 const Option = Select.Option
 import styles from './index.less'
 
-const Search = ({form, onSearch, onAdd, form: {
+const Search = ({form, onSearch, onAdd, giftTypes, form: {
 	getFieldDecorator,
   validateFields,
   getFieldsValue
@@ -23,6 +23,12 @@ const Search = ({form, onSearch, onAdd, form: {
 		onSearch(data)
 	}
 
+	const GiftTypeOptions = giftTypes.map(item => {
+		return (
+			<Option key={item.itemcode} value={item.itemcode}>{item.itemname}</Option>
+		)
+	})
+
 	return (
 		<div className={styles.search}>
 			<Form inline onSubmit={handleSubmit} className={styles.searchLeft}>
@@ -32,8 +38,7 @@ const Search = ({form, onSearch, onAdd, form: {
 				<FormItem label='礼品类别：'>
 					{getFieldDecorator('giftType')(
 						<Select style={{width: 100}}>
-							<Option value='1'>1</Option>
-							<Option value='2'>3</Option>
+							{GiftTypeOptions}
 						</Select>)}
 				</FormItem>
 				<FormItem label='发放时间：'>
