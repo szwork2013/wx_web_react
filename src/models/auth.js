@@ -2,6 +2,7 @@ import { hashHistory } from 'dva/router'
 import {message, notification} from 'antd'
 import {loginSer} from '../services/users'
 import {Token} from '../utils/constants'
+import _ from 'lodash'
 
 export default {
 	namespace: 'auth',
@@ -12,24 +13,27 @@ export default {
 		password: '',
 		remember: true,
 		menus: [
-			{key: 1001,	name: '首页',	icon: 'home',	url: '/'},
+			{key: '1001',	name: '首页',	icon: 'home',	url: '/'},
 			{
-				key: 1101,
+				key: '1101',
 				name: '商户管理',
 				icon: 'home',
 				childs:
 				[
-					{key: 1102, name: '商户会员', url: '/cusmbr'},
-					{key: 1202,	name: '微信订阅',	url: '/subscribe'},
-					{key: 1203,	name: '微信消息',	url: '/wxtask'},
-					{key: 1204,	name: '礼品管理',	url: '/vipgift'}
+					{key: '1102', name: '商户会员', url: '/cusmbr'},
+					{key: '1202',	name: '微信订阅',	url: '/subscribe'},
+					{key: '1203',	name: '微信消息',	url: '/wxtask'},
+					{key: '1204',	name: '礼品管理',	url: '/vipgift'}
 				]
 			},
-			{key: 1501,	name: '订单管理',	icon: 'android', childs: [{key: 1502,	name: '微信订单',	url: '/wxchargeord'}]},
+			{key: '1501',	name: '订单管理',	icon: 'android', childs: [{key: '1502',	name: '微信订单',	url: '/wxchargeord'}]},
 			// {key: 1301,	name: '百度地图',	icon: 'environment-o', url: '/map'},
 			// {key: 1401,	name: '停车场地图', icon: 'environment-o',	url: '/parkmap'},
-			{key: 9901,	name: 'demo',	icon: 'android', url: '/demo'}
-		]
+			{key: '9901',	name: 'demo',	icon: 'android', url: '/demo'}
+		],
+		defaultMenu: [],
+		leftMenu: {},
+		defaultLeftMenu: []
 	},
 	subscriptions: {
 		setup ({dispatch,	history}) {
@@ -45,6 +49,9 @@ export default {
 						}
 					})
 				}
+
+				let path = location.pathname
+				dispatch({type: 'changeLeftMenu', payload: {path}})
 			})
 		}
 	},
@@ -92,6 +99,32 @@ export default {
 		},
 		loginSuccess (state, action) {
 			return {...state, logining: false}
+		},
+		uptState (state, action) {
+			return {...state, ...action.payload}
+		},
+		changeLeftMenu (state, action) {
+			let path = action.payload.path
+
+			let left = _.filter(state.menus, chr => {
+				let temp = _.filter(chr.childs, child => {
+					return child.url === path
+				})
+				if (temp.length > 0) {
+					return true
+				} else {
+					return chr.url === path
+				}
+			})
+			if (left && left.length > 0) {
+				if (left[0].childs && left[0].childs.length > 0) {
+					let first = _.first(left[0].childs)
+					return {...state, ...action.payload, leftMenu: left[0], defaultLeftMenu: [first.key], defaultMenu: [left[0].key]}
+				} else {
+					return {...state, ...action.payload, leftMenu: left[0], defaultLeftMenu: [], defaultMenu: ['1001']}
+				}
+			}
+			return {...state, ...action.payload, defaultMenu: ['1001']}
 		}
 	}
 }

@@ -84,8 +84,13 @@ export function put (url, params, options) {
  * @returns
  */
 export function remove (url, params, options) {
+	options = options || {}
 	options.method = 'delete'
-	return request(`${url}?${qs.stringify(params)}`, options)
+	if (params) {
+		return request(`${url}?${qs.stringify(params)}`, options)
+	} else {
+		return request(`${url}`, options)
+	}
 }
 /**
  * Requests a URL, returning a promise.

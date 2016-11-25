@@ -1,4 +1,4 @@
-import {readGifts, createGift} from '../services/vip_gift'
+import {readGifts, createGift, readGiftOne, delGift} from '../services/vip_gift'
 import {message} from 'antd'
 import _ from 'lodash'
 
@@ -22,6 +22,7 @@ export default {
 			history.listen(location => {
 				if (location.pathname === '/vipgift') {
 					dispatch({type: 'read', payload: location.query})
+					dispatch({type: 'common/getGiftTypeItems'})
 				}
 			})
 		}
@@ -30,10 +31,9 @@ export default {
 	effects: {
 		*readOne ({payload}, {call, put}) {
 			yield put({type: 'showLoading', payload})
-			const data = yield call(readGifts, payload)
+			const data = yield call(readGiftOne, payload)
 			if (data) {
-				let temp = _.first(data.data)
-				yield put({type: 'success', payload: {currentItem: temp}})
+				yield put({type: 'success', payload: {currentItem: data}})
 			} else {
 				yield put({type: 'fail', payload: {currentItem: {}}})
 			}
@@ -68,17 +68,26 @@ export default {
 			const data = yield call(readGifts, payload)
 			if (data) {
 				message.success('保存成功', 3)
-				yield put({type: 'query'})
+				yield put({type: 'read',
+					payload: {
+						page: 1,
+						pageSize: payload.pageSize,
+						current: 1
+					}})
 			} else {
 				yield put({type: 'fail', payload: {datas: [], total: 0}})
 			}
 		},
 		*remove ({payload}, {call, put}) {
-			yield put({type: 'showLoading'})
-			const data = yield call(readGifts, payload)
+			const data = yield call(delGift, payload)
 			if (data) {
 				message.success('删除成功', 3)
-				yield put({type: 'query'})
+				yield put({type: 'read',
+					payload: {
+						page: 1,
+						pageSize: payload.pageSize,
+						current: 1
+					}})
 			} else {
 				yield put({type: 'fail', payload: {datas: [], total: 0}})
 			}

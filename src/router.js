@@ -59,7 +59,7 @@ export default ({ history, app }) => {
 				require.ensure([], (require) => {
 					app.model(require('./models/common'))
 					app.model(require('./models/auth'))
-					cb(null, require('./layouts/V2/App'))
+					cb(null, require('./layouts/V3/App'))
 				})
 			},
 			indexRoute: {

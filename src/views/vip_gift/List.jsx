@@ -1,9 +1,10 @@
 import React, {PropTypes} from 'react'
-import { Button } from 'antd'
+import { Button, Popconfirm } from 'antd'
 import CusTable from '../../common/cus_table'
 import { formatDate } from '../../utils'
+const ButtonGroup = Button.Group
 
-const List = ({total, loading, current, pageSize, dataSource, onOpen, onPageChange}) => {
+const List = ({total, loading, current, pageSize, dataSource, onOpen, onPageChange, onDelete}) => {
 	const columns = [
 		{
 			title: '礼品名称',
@@ -12,7 +13,7 @@ const List = ({total, loading, current, pageSize, dataSource, onOpen, onPageChan
 		},
 		{
 			title: '礼品类别',
-			dataIndex: 'giftType',
+			dataIndex: 'giftTypeName',
 			key: 'giftType'
 		},
 		{
@@ -22,7 +23,7 @@ const List = ({total, loading, current, pageSize, dataSource, onOpen, onPageChan
 		},
 		{
 			title: '送达方式',
-			dataIndex: 'getWay',
+			dataIndex: 'getWayName',
 			key: 'getWay'
 		},
 		{
@@ -45,9 +46,16 @@ const List = ({total, loading, current, pageSize, dataSource, onOpen, onPageChan
 		{
 			title: '操作',
 			key: 'oper',
-			width: 50,
+			width: 120,
 			fixed: 'right',
-			render: (text, row) => (<Button type='primary' size='small' onClick={() => { onOpen(row.giftCode, 'detail') }}>详情</Button>)
+			render: (text, row) => (
+				<ButtonGroup size='small'>
+					<Button type='primary' size='small' onClick={() => { onOpen(row.giftCode, 'detail') }}>详情</Button>
+					<Popconfirm title = '确认要删除么?' onConfirm = {() => onDelete(row.giftCode)}>
+							<Button type='goest' size='small'>删除</Button>
+					</Popconfirm>
+				</ButtonGroup>
+				)
 		}
 	]
 	const listProps = {

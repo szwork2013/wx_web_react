@@ -4,6 +4,7 @@ const RangePicker = DatePicker.RangePicker
 const FormItem = Form.Item
 const Option = Select.Option
 import styles from './index.less'
+import _ from 'lodash'
 
 const Search = ({form, onSearch, onAdd, giftTypes, form: {
 	getFieldDecorator,
@@ -23,7 +24,12 @@ const Search = ({form, onSearch, onAdd, giftTypes, form: {
 		onSearch(data)
 	}
 
-	const GiftTypeOptions = giftTypes.map(item => {
+	let temp = _.cloneDeep(giftTypes)
+	temp.splice(0, 0, {
+		itemname: '全部',
+		itemcode: ''
+	})
+	const GiftTypeOptions = temp.map(item => {
 		return (
 			<Option key={item.itemcode} value={item.itemcode}>{item.itemname}</Option>
 		)
@@ -36,7 +42,7 @@ const Search = ({form, onSearch, onAdd, giftTypes, form: {
 					{getFieldDecorator('giftName')(<Input type='text'/>)}
 				</FormItem>
 				<FormItem label='礼品类别：'>
-					{getFieldDecorator('giftType')(
+					{getFieldDecorator('giftType', {initialValue: ''})(
 						<Select style={{width: 100}}>
 							{GiftTypeOptions}
 						</Select>)}

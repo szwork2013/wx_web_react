@@ -28,6 +28,12 @@ const Sidebar = () => {
 							微信订阅
 						</Link>
 					</MenuItem>
+					<MenuItem key='vipgift'>
+						<Link to='/vipgift'>
+							<Icon type='android'/>
+							礼品管理
+						</Link>
+					</MenuItem>
 				</SubMenu>
 				<SubMenu key='sub2' title={< span > <Icon type='appstore'/>Demo</span >}>
 					<MenuItem key='marks'>

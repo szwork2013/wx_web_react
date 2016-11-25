@@ -16,14 +16,23 @@ const VipGift = ({dispatch, gift, common}) => {
 		onPageChange (page) {
 			dispatch({type: 'gift/read',	payload: {page,	pageSize,	current: page}})
 		},
-		onOpen (id, type) {
+		onOpen (giftCode, type) {
 			dispatch({type: 'common/getGiftTypeItems'})
 			dispatch({type: 'common/getGetWayItems'})
-			dispatch({type: 'gift/readOne'})
+			dispatch({type: 'gift/readOne',
+				payload: {
+					giftCode
+				}})
 			dispatch({type: 'gift/showModal',
 				payload: {
 					isSaving: false,
 					modalType: 'detail'
+				}})
+		},
+		onDelete (giftCode) {
+			dispatch({type: 'gift/remove',
+				payload: {
+					giftCode
 				}})
 		}
 	}
@@ -49,7 +58,8 @@ const VipGift = ({dispatch, gift, common}) => {
 				payload: {
 					isSaving: false,
 					modalType: 'create',
-					currentItem: {}
+					currentItem: {},
+					uploadFiles: []
 				}})
 		}
 	}

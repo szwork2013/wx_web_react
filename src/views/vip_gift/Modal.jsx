@@ -23,7 +23,7 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 			const rangeDateValue = fieldsValue['rangeDate']
 			const data = {
 				...getFieldsValue(),
-				vldDays: fieldsValue['vldDays'] ? fieldsValue['vldDays'].format() : '',
+				vldDays: fieldsValue['vldDays'] ? fieldsValue['vldDays'].format() : moment().format(),
 				begDate: rangeDateValue[0] ? rangeDateValue[0].format() : '',
 				endDate: rangeDateValue[1] ? rangeDateValue[1].format() : '',
 				status: fieldsValue['status'] ? 'aa' : 'nn',
@@ -34,18 +34,23 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 		})
 	}
 
+	let footer = []
+	if (type === 'detail') {
+		footer.push(<Button key='back' type='ghost' size='large' onClick={onCancel}>关闭</Button>)
+	} else {
+		footer.push(<Button key='back' type='ghost' size='large' onClick={onCancel}>取消</Button>)
+		footer.push(<Button key='submit' type='primary' size='large' loading={isSaving} onClick={handleOk}>
+			确认
+		</Button>)
+	}
+
 	const modalProps = {
 		title: type === 'create' ? '新增' : '编辑',
 		visible,
 		// onOk: handleOk,
 		onCancel,
 		maskClosable: false,
-		footer: [
-			<Button key='back' type='ghost' size='large' onClick={onCancel}>取消</Button>,
-			<Button key='submit' type='primary' size='large' loading={isSaving} onClick={handleOk}>
-				确认
-			</Button>
-		]
+		footer
 	}
 	const formItemLayout = {
 		labelCol: {span: 8},
@@ -110,7 +115,7 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 					<Col span={12}>
 						<FormItem label='礼品类别：' {...formItemLayout}>
 							{
-								type === 'detail' ? <label>{item.giftType}</label> : getFieldDecorator('giftType', {
+								type === 'detail' ? <label>{item.giftTypeName}</label> : getFieldDecorator('giftType', {
 									initialValue: item.giftType || '001',
 									rules: [
 										{required: true, message: '礼品类别不能为空'}
@@ -128,7 +133,7 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 					<Col span={12}>
 						<FormItem label='送达方式：' {...formItemLayout}>
 							{
-								type === 'detail' ? <label>{item.getWay}</label> : getFieldDecorator('getWay', {
+								type === 'detail' ? <label>{item.getWayName}</label> : getFieldDecorator('getWay', {
 									initialValue: item.getWay || '001',
 									rules: [
 										{required: true, message: '送达方式不能为空'}
@@ -195,7 +200,7 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 					<Col span={16}>
 						<FormItem label='发放时间段：' labelCol={{span: 6}} wrapperCol={{span: 18}}>
 							{
-								type === 'detail' ? <label>{moment(item.begDate).format('YYYY-MM-DD HH:mm:ss')}至{moment(item.endDate).format('YYYY-MM-DD HH:mm:ss')}</label> : getFieldDecorator('rangeDate', {
+								type === 'detail' ? <label>{moment(item.begDate).format('YYYY-MM-DD HH:mm:ss')} 至 {moment(item.endDate).format('YYYY-MM-DD HH:mm:ss')}</label> : getFieldDecorator('rangeDate', {
 									initialValue: (item.begDate && item.endDate) ? [moment(item.begDate), moment(item.endDate)] : null,
 									rules: [
 										{type: 'array', required: true, message: '发放时间段不能为空'}
@@ -209,7 +214,7 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 					<Col span={12}>
 						<FormItem label='图片上传' {...formItemLayout}>
 							{
-								type === 'detail' ? <img src={'http://localhost:8080' + item.giftPic} style={{maxWidth: '100%'}}/> : getFieldDecorator('giftPic', {
+								type === 'detail' ? <img src={item.giftPic} style={{maxWidth: '100%'}}/> : getFieldDecorator('giftPic', {
 									valuePropName: 'fileList',
 									initialValue: uploadFiles,
 									getValueFromEvent: handleEvent,
