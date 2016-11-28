@@ -1,6 +1,7 @@
-import {readGifts, createGift, readGiftOne, delGift} from '../services/vip_gift'
+import {readGifts, createGift, readGiftOne, delGift, uptGift} from '../services/vip_gift'
 import {message} from 'antd'
 import _ from 'lodash'
+import { getFileName } from '../utils'
 
 export default {
 	namespace: 'gift',
@@ -33,6 +34,19 @@ export default {
 			yield put({type: 'showLoading', payload})
 			const data = yield call(readGiftOne, payload)
 			if (data) {
+				yield put({type: 'common',
+					payload: {
+						uploadFiles: [
+							{
+								uid: data.giftCode,
+								name: getFileName(data.giftPic),
+								url: data.fullPicPath,
+								response: {
+									url: data.giftPic
+								}
+							}
+						]
+					}})
 				yield put({type: 'success', payload: {currentItem: data}})
 			} else {
 				yield put({type: 'fail', payload: {currentItem: {}}})
@@ -65,8 +79,9 @@ export default {
 		},
 		*update ({payload}, {call, put}) {
 			yield put({type: 'showLoading'})
-			const data = yield call(readGifts, payload)
+			const data = yield call(uptGift, payload)
 			if (data) {
+				yield put({type: 'hideModal', payload: {isSuccess: true}})
 				message.success('保存成功', 3)
 				yield put({type: 'read',
 					payload: {
@@ -75,7 +90,7 @@ export default {
 						current: 1
 					}})
 			} else {
-				yield put({type: 'fail', payload: {datas: [], total: 0}})
+				yield put({type: 'fail', payload: {datas: [], total: 0, isSuccess: false}})
 			}
 		},
 		*remove ({payload}, {call, put}) {

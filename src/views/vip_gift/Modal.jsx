@@ -19,15 +19,17 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 				return
 			}
 			const upFile = _.first(uploadFiles)
+			console.log(upFile)
 			const fieldsValue = getFieldsValue()
 			const rangeDateValue = fieldsValue['rangeDate']
 			const data = {
 				...getFieldsValue(),
-				vldDays: fieldsValue['vldDays'] ? fieldsValue['vldDays'].format() : moment().format(),
-				begDate: rangeDateValue[0] ? rangeDateValue[0].format() : '',
-				endDate: rangeDateValue[1] ? rangeDateValue[1].format() : '',
+				vldDays: fieldsValue['vldDays'] ? fieldsValue['vldDays'].format() : undefined,
+				begDate: rangeDateValue[0] ? rangeDateValue[0].format() : undefined,
+				endDate: rangeDateValue[1] ? rangeDateValue[1].format() : undefined,
 				status: fieldsValue['status'] ? 'aa' : 'nn',
-				giftPic: upFile.response.url
+				giftPic: upFile.response.url,
+				giftCode: item.giftCode
 			}
 			onOk(data)
 			resetFields()
@@ -160,7 +162,7 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 					<Col span={12}>
 						<FormItem label='礼品价值：' {...formItemLayout}>
 							{
-								type === 'detail' ? <label>{item.giftAmt}</label> : getFieldDecorator('giftAmt', {
+								type === 'detail' ? <label>{item.giftAmt} 元</label> : getFieldDecorator('giftAmt', {
 									initialValue: item.giftAmt || 0,
 									rules: [
 										{type: 'number', required: true, message: '礼品价值不能为空'}
@@ -172,7 +174,7 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 					<Col span={12}>
 						<FormItem label='消耗积分：' {...formItemLayout}>
 							{
-								type === 'detail' ? <label>{item.scoreNeed}</label> : getFieldDecorator('scoreNeed', {
+								type === 'detail' ? <label>{item.scoreNeed} 分</label> : getFieldDecorator('scoreNeed', {
 									initialValue: item.scoreNeed || 0,
 									rules: [
 										{type: 'number', required: true, message: '消耗积分不能为空'}
@@ -186,7 +188,7 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 					<Col span={12}>
 						<FormItem label='可兑数量：' {...formItemLayout}>
 							{
-								type === 'detail' ? <label>{item.stkQty}</label> : getFieldDecorator('stkQty', {
+								type === 'detail' ? <label>{item.stkQty} 个</label> : getFieldDecorator('stkQty', {
 									initialValue: item.stkQty || 0,
 									rules: [
 										{type: 'number', required: true, message: '可兑数量不能为空'}
@@ -197,8 +199,8 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 					</Col>
 				</Row>
 				<Row>
-					<Col span={16}>
-						<FormItem label='发放时间段：' labelCol={{span: 6}} wrapperCol={{span: 18}}>
+					<Col span={24}>
+						<FormItem label='发放时间段：' labelCol={{span: 4}} wrapperCol={{span: 18}}>
 							{
 								type === 'detail' ? <label>{moment(item.begDate).format('YYYY-MM-DD HH:mm:ss')} 至 {moment(item.endDate).format('YYYY-MM-DD HH:mm:ss')}</label> : getFieldDecorator('rangeDate', {
 									initialValue: (item.begDate && item.endDate) ? [moment(item.begDate), moment(item.endDate)] : null,
@@ -214,7 +216,7 @@ const CusModal = ({visible, item = {}, onOk, onCancel, type, isSaving, isSuccess
 					<Col span={12}>
 						<FormItem label='图片上传' {...formItemLayout}>
 							{
-								type === 'detail' ? <img src={item.giftPic} style={{maxWidth: '100%'}}/> : getFieldDecorator('giftPic', {
+								type === 'detail' ? <img src={item.fullPicPath} style={{maxWidth: '100%'}}/> : getFieldDecorator('giftPic', {
 									valuePropName: 'fileList',
 									initialValue: uploadFiles,
 									getValueFromEvent: handleEvent,

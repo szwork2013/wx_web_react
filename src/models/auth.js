@@ -23,7 +23,8 @@ export default {
 					{key: '1102', name: '商户会员', url: '/cusmbr'},
 					{key: '1202',	name: '微信订阅',	url: '/subscribe'},
 					{key: '1203',	name: '微信消息',	url: '/wxtask'},
-					{key: '1204',	name: '礼品管理',	url: '/vipgift'}
+					{key: '1204',	name: '礼品管理',	url: '/vipgift'},
+					{key: '1205',	name: '积分兑换查询',	url: '/vipgiftexch'}
 				]
 			},
 			{key: '1501',	name: '订单管理',	icon: 'android', childs: [{key: '1502',	name: '微信订单',	url: '/wxchargeord'}]},

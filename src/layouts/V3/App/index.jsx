@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import { connect } from 'dva'
-import { Card } from 'antd'
+import { Card, Row, Col } from 'antd'
 
 import Header from '../Header'
 import Sidebar from '../Sidebar'
@@ -26,7 +26,7 @@ const App = ({children, dispatch, auth}) => {
 		onMenuClick (key) {
 			dispatch({type: 'auth/uptState',
 				payload: {
-					defaultLeftMenu: key
+					defaultLeftMenu: [key]
 				}})
 		}
 	}
@@ -34,14 +34,20 @@ const App = ({children, dispatch, auth}) => {
 	return (
 		<div className={styles.mainbg}>
 			<Header {...headerProps}/>
-			<Card className={styles.container}>
-				<div className={styles.sidebar}>
-					<Sidebar {...sideBarProps}/>
-				</div>
-				<div className={styles.right}>
-					{children}
-				</div>
-			</Card>
+				<Card className={styles.container}>
+					<Row>
+						<Col span={3}>
+							<div className={styles.sidebar}>
+								<Sidebar {...sideBarProps}/>
+							</div>
+						</Col>
+						<Col span={20} offset={1}>
+							<div className={styles.right}>
+								{children}
+							</div>
+						</Col>
+					</Row>
+				</Card>
 		</div>
 	)
 }

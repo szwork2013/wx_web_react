@@ -4,6 +4,7 @@ import VipGiftList from './List'
 import VipGiftSearch from './Search'
 import VipGiftModal from './Modal'
 
+
 const VipGift = ({dispatch, gift, common}) => {
 	const {total, loading, current, currentItem, modalVisible, modalType, datas, pageSize, uploadFiles, isSaving, isSuccess} = gift
 	const {giftTypes, getWays} = common
@@ -26,7 +27,7 @@ const VipGift = ({dispatch, gift, common}) => {
 			dispatch({type: 'gift/showModal',
 				payload: {
 					isSaving: false,
-					modalType: 'detail'
+					modalType: type
 				}})
 		},
 		onDelete (giftCode) {
@@ -74,11 +75,19 @@ const VipGift = ({dispatch, gift, common}) => {
 		getWays,
 		visible: modalVisible,
 		onOk (data) {
-			dispatch({type: 'gift/create',
-				payload: {
-					pageSize,
-					...data
-				}})
+			if (modalType === 'edit') {
+					dispatch({type: 'gift/update',
+						payload: {
+							pageSize,
+							...data
+						}})
+			} else {
+				dispatch({type: 'gift/create',
+					payload: {
+						pageSize,
+						...data
+					}})
+			}
 		},
 		onCancel () {
 			dispatch({type: 'gift/hideModal'})

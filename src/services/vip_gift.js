@@ -1,8 +1,9 @@
 'use strict'
 
-import {get, post, remove} from '../utils/request'
+import {get, post, remove, put} from '../utils/request'
 
-const url = 'vip/gift'
+const urlGift = 'vip/gift'
+const urlGiftExch = 'vip/giftexch'
 
 
 /**
@@ -13,7 +14,7 @@ const url = 'vip/gift'
  * @returns
  */
 export async function readGifts (params) {
-	return get(url, params)
+	return get(urlGift, params)
 }
 
 
@@ -36,9 +37,20 @@ export async function readGiftOne (params) {
  * @returns
  */
 export async function createGift (params) {
-	return post(url, params)
+	return post(urlGift, params)
 }
 
+
+/**
+ * gift
+ * 编辑礼品
+ * @export
+ * @param {any} params
+ * @returns
+ */
+export async function uptGift (params) {
+	return put(urlGift, params)
+}
 
 /**
  * gift
@@ -48,5 +60,16 @@ export async function createGift (params) {
  * @returns
  */
 export async function delGift (params) {
-	return remove(url + '/' + params.giftCode)
+	return remove(urlGift + '/' + params.giftCode)
+}
+
+/**
+ * giftExch
+ * 获取礼品兑换信息
+ * @export
+ * @param {any} params
+ * @returns
+ */
+export async function readGiftExch (params) {
+	return get(urlGiftExch, params)
 }

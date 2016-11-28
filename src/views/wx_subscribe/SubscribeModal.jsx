@@ -1,14 +1,12 @@
-import React, {PropTypes} from 'react';
-import {Form, Input, Modal, DatePicker, Checkbox, Radio, Switch} from 'antd'
-import moment from 'moment'
+import React, {PropTypes} from 'react'
+import {Form, Modal, Col, Row} from 'antd'
+import { formatSex, formatDate } from '../../utils'
 
 const FormItem = Form.Item
-const RadioButton = Radio.Button
-const RadioGroup = Radio.Group
 
 const formItemLayout = {
 	labelCol: {
-		span: 6
+		span: 10
 	},
 	wrapperCol: {
 		span: 14
@@ -27,7 +25,7 @@ const SubscribeModal = ({
 		getFieldsValue
 	}
 }) => {
-	function handleOk() {
+	function handleOk () {
 		onOk()
 		// validateFields((errors) => {
 		//   if (errors) {
@@ -50,36 +48,53 @@ const SubscribeModal = ({
 		visible,
 		onOk: handleOk,
 		onCancel,
+		width: 450
 	}
 
-	const canEdit = type === 'create' ? false : false
+	const isDetail = true
 
 	return (
 		<Modal {...modalOpts} >
 			<Form horizontal>
-				<FormItem label='微信OpenID：' {...formItemLayout}>
-					{getFieldDecorator('wxOpenId', {
-						initialValue: item.wxOpenId,
-					})(<Input type='text' disabled/>)}
+				<FormItem wrapperCol={{span: 12, offset: 9}}>
+					<img src={item.wxHeadImgUrl} style={{width: 96, height: 96, borderRadius: 48}}/>
 				</FormItem>
-				<FormItem label="用户昵称：" {...formItemLayout}>
-					{getFieldDecorator('wxNickName', {
-						initialValue: item.wxNickName,
-					})(<Input type='text' disabled/>)}
-				</FormItem>
-				<FormItem label="关注时间：" {...formItemLayout}>
-					{getFieldDecorator('wxSubscribeTime', {
-						initialValue: moment(item.wxSubscribeTime),
-					})(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" placeholder="关注时间" disabled/>)}
-				</FormItem>
-				<FormItem label="性别：" {...formItemLayout}>
-					{getFieldDecorator('wxSex', {
-						initialValue: item.wxSex
-					})(<RadioGroup disabled>
-							<RadioButton value="1">男</RadioButton>
-							<RadioButton value="2">女</RadioButton>
-						</RadioGroup>)}
-				</FormItem>
+				<Row>
+					<Col span={12}>
+						<FormItem label='用户昵称：' {...formItemLayout}>
+							<label>{item.wxNickName}</label>
+						</FormItem>
+					</Col>
+					<Col span={12}>
+						<FormItem label='关注时间：' {...formItemLayout}>
+							<label>{formatDate(item.wxSubscribeTime)}</label>
+						</FormItem>
+					</Col>
+				</Row>
+				<Row>
+					<Col span={12}>
+						<FormItem label='性别：' {...formItemLayout}>
+							<label>{formatSex(item.wxSex)}</label>
+						</FormItem>
+					</Col>
+					<Col span={12}>
+						<FormItem label='省份/城市：' {...formItemLayout}>
+							<label>{item.wxProvince}{item.wxCity ? '/' + item.wxCity : ''}</label>
+						</FormItem>
+					</Col>
+				</Row>
+				<Row>
+					<Col span={12}>
+						<FormItem label='会员姓名：' {...formItemLayout}>
+							<label>{item.mbrName}</label>
+						</FormItem>
+					</Col>
+					<Col span={12}>
+						<FormItem label='会员手机号：' {...formItemLayout}>
+							<label>{item.mobile}</label>
+						</FormItem>
+					</Col>
+				</Row>
 			</Form>
 		</Modal>
 	)

@@ -63,3 +63,32 @@ export function formatTaskStatus (origin) {
 	else if (origin === '04')	return '发送中'
 	else return origin
 }
+
+
+/**
+ * format
+ * 兑换单状态码转换
+ * @export
+ * @param {any} origin
+ * @returns
+ */
+export function formatGiftExchStatus (origin) {
+	if (origin === 'na') return '起草'
+	else if (origin === 'aa')	return '生效'
+	else if (origin === 'nn')	return '停用'
+	else return origin
+}
+
+/**
+ * file
+ * 获取文件名称
+ * @export
+ * @param {any} origin
+ * @returns
+ */
+export function getFileName (origin) {
+	if (!origin) return ''
+	let name = origin.replace(/(.*\/)*([^.]+).*/ig, '$2')
+	let type = origin.replace(/.+\./, '')
+	return `${name}.${type}`
+}

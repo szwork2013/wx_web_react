@@ -46,11 +46,12 @@ const List = ({total, loading, current, pageSize, dataSource, onOpen, onPageChan
 		{
 			title: '操作',
 			key: 'oper',
-			width: 120,
+			width: 148,
 			fixed: 'right',
 			render: (text, row) => (
 				<ButtonGroup size='small'>
 					<Button type='primary' size='small' onClick={() => { onOpen(row.giftCode, 'detail') }}>详情</Button>
+					<Button size='small' onClick={() => { onOpen(row.giftCode, 'edit') }}>编辑</Button>
 					<Popconfirm title = '确认要删除么?' onConfirm = {() => onDelete(row.giftCode)}>
 							<Button type='goest' size='small'>删除</Button>
 					</Popconfirm>

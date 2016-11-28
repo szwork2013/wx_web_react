@@ -4,7 +4,7 @@
     "index": "./src/index.js"
   },
   "dependencies": {
-    "antd": "^2.2.1",
+    "antd": "^2.5.0",
     "classnames": "^2.2.5",
     "dva": "^1.0.0",
     "es6-promise": "^4.0.5",
