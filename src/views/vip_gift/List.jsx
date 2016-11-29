@@ -46,7 +46,7 @@ const List = ({total, loading, current, pageSize, dataSource, onOpen, onPageChan
 		{
 			title: '操作',
 			key: 'oper',
-			width: 148,
+			width: 150,
 			fixed: 'right',
 			render: (text, row) => (
 				<ButtonGroup size='small'>

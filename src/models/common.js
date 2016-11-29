@@ -4,6 +4,7 @@ import {message} from 'antd'
 export default {
 	namespace: 'common',
 	state: {
+		pageSize: 10,
 		giftTypes: [],
 		getWays: []
 	},

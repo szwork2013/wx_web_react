@@ -145,6 +145,15 @@ export default ({ history, app }) => {
 					}
 				},
 				{
+					path: '/module',
+					getComponent (nextState, cb) {
+						require.ensure([], (require) => {
+							app.model(require('./models/power_module'))
+							cb(null, require('./views/power_module'))
+						})
+					}
+				},
+				{
 					path: '*',
 					getComponent (nextState, cb) {
 						require.ensure([], (require) => {

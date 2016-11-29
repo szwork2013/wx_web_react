@@ -15,19 +15,28 @@ export default {
 		menus: [
 			{key: '1001',	name: '首页',	icon: 'home',	url: '/'},
 			{
+				key: '1201',
+				name: '系统管理',
+				icon: 'home',
+				childs:
+				[
+					{key: '1202', name: '菜单管理', url: '/module'}
+				]
+			},
+			{
 				key: '1101',
 				name: '商户管理',
 				icon: 'home',
 				childs:
 				[
 					{key: '1102', name: '商户会员', url: '/cusmbr'},
-					{key: '1202',	name: '微信订阅',	url: '/subscribe'},
-					{key: '1203',	name: '微信消息',	url: '/wxtask'},
-					{key: '1204',	name: '礼品管理',	url: '/vipgift'},
-					{key: '1205',	name: '积分兑换查询',	url: '/vipgiftexch'}
+					{key: '1102',	name: '微信订阅',	url: '/subscribe'},
+					{key: '1103',	name: '微信消息',	url: '/wxtask'},
+					{key: '1104',	name: '礼品管理',	url: '/vipgift'},
+					{key: '1105',	name: '积分兑换查询',	url: '/vipgiftexch'}
 				]
 			},
-			{key: '1501',	name: '订单管理',	icon: 'android', childs: [{key: '1502',	name: '微信订单',	url: '/wxchargeord'}]},
+			{key: '1501',	name: '订单管理',	icon: 'android', childs: [{key: '1502',	name: '微信充值订单',	url: '/wxchargeord'}]},
 			// {key: 1301,	name: '百度地图',	icon: 'environment-o', url: '/map'},
 			// {key: 1401,	name: '停车场地图', icon: 'environment-o',	url: '/parkmap'},
 			{key: '9901',	name: 'demo',	icon: 'android', url: '/demo'}

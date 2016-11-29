@@ -54,7 +54,7 @@ const CusMbrList = ({dataSource, total, loading, current, onPageChange, onOpenMo
 			title: '操作',
 			key: 'operation',
 			fixed: 'right',
-			width: 145,
+			width: 150,
 			render: (text, record) => (
 				<ButtonGroup size='small'>
 					<Button type='primary' onClick={() => onOpenModal(record)}>消息历史</Button>

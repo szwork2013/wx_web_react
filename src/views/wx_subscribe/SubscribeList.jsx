@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react'
-import {Table, message, Popconfirm, Pagination} from 'antd'
+import { Button } from 'antd'
 import CusTable from '../../common/cus_table'
 import {formatDate, formatSex, formatSubscribeStatus} from '../../utils'
 
@@ -60,9 +60,8 @@ const SubscribeList = ({total, current, loading, dataSource, onPageChange, onOpe
 			fixed: 'right',
 			width: 50,
 			render: (text, record) => (
-				<p>
-					<a onClick={() => onOpenModal(record)}>详情</a >
-				</p>)
+				<Button type='primary' size='small' onClick={() => { onOpenModal(record) }}>详情</Button>
+			)
 		}
 	]
 
