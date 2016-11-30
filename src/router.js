@@ -1,12 +1,6 @@
 import React, { PropTypes } from 'react'
 import { Router } from 'dva/router'
 import {Token} from './utils/constants'
-// import Subscribe from './views/wx_subscribe/WxSubscribe'
-// import Home from './views/home/Home'
-// import Login from './common/login/Login'
-// import App from './layouts/V2/App'
-// import NotFound from './common/not_found'
-// import WxTask from './views/wx_task'
 
 export default ({ history, app }) => {
 	function requireAuth (nextState, replace) {
@@ -150,6 +144,15 @@ export default ({ history, app }) => {
 						require.ensure([], (require) => {
 							app.model(require('./models/power_module'))
 							cb(null, require('./views/power_module'))
+						})
+					}
+				},
+				{
+					path: '/wxorderadmin',
+					getComponent (nextState, cb) {
+						require.ensure([], (require) => {
+							app.model(require('./models/wx_order_admin'))
+							cb(null, require('./views/wx_order_admin'))
 						})
 					}
 				},

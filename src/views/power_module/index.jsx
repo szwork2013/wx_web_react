@@ -6,7 +6,7 @@ import CusTree from './CusTree'
 import CusOper from './CusOper'
 
 const Module = ({dispatch, module}) => {
-	const {datas, visible, selectedKeys, curSelMenu, isDetail, parentMenu} = module
+	const {datas, visible, selectedKeys, curSelMenu, type, parentMenu} = module
 	const treeProps = {
 		dispatch,
 		datas,
@@ -15,7 +15,7 @@ const Module = ({dispatch, module}) => {
 
 	const formProps = {
 		dispatch,
-		isDetail,
+		type,
 		curSelMenu,
 		parentMenu,
 		visible

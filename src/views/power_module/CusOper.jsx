@@ -1,34 +1,39 @@
 import React, {PropTypes} from 'react'
-import { Button, message } from 'antd'
+import { Button, message, Modal } from 'antd'
 import styles from './index.less'
 import _ from 'lodash'
+const confirm = Modal.confirm
 
 const CusOper = ({dispatch, selectedKeys, curSelMenu, parentMenu}) => {
 	const btnClick = type => {
-		if (type !== 'add') {
-			if (_.size(selectedKeys) === 0) {
-				message.warn('请选择需要操作的菜单', 3)
-			}
-		}
 		switch (type) {
 		case 'add':
-			if (curSelMenu.pid !== 0) {
+			if (curSelMenu && curSelMenu.pid && curSelMenu.pid !== 0) {
 				message.warn('二级菜单不能继续添加', 3)
 				return
 			}
-			dispatch({type: 'module/common', payload: {visible: true, isDetail: false, curSelMenu: {}, parentMenu: curSelMenu}})
+			dispatch({type: 'module/common', payload: {visible: true, type, curSelMenu: {}, parentMenu: !curSelMenu || !curSelMenu.id ? {name: '一级菜单', id: 0} : curSelMenu}})
 			break
 		case 'edit':
 			if (_.size(selectedKeys) === 0) {
 				message.warn('请选择需要操作的菜单', 3)
 				return
 			}
-			dispatch({type: 'module/common', payload: {visible: true, isDetail: false}})
+			dispatch({type: 'module/common', payload: {visible: true, type}})
 			break
 		case 'del':
 			if (_.size(selectedKeys) === 0) {
 				message.warn('请选择需要操作的菜单', 3)
+				return
 			}
+			confirm({
+				title: '提示',
+				content: `确认删除<${curSelMenu.name}>菜单?`,
+				onOk () {
+					dispatch({type: 'module/remove', payload: {id: curSelMenu.id}})
+					dispatch({type: 'auth/getModules'})
+				}
+			})
 			break
 		}
 	}

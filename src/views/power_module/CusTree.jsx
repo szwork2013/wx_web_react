@@ -38,7 +38,7 @@ const CusTree = ({dispatch, datas, selectedKeys}) => {
 		selectedKeys,
 		onSelect (selectedKeys, info) {
 			if (_.size(selectedKeys) === 0) {
-				dispatch({type: 'module/common', payload: {selectedKeys, visible: false}})
+				dispatch({type: 'module/common', payload: {selectedKeys, visible: false, curSelMenu: {name: '一级菜单', id: 0}, parentMenu: {name: '一级菜单', id: 0}}})
 				return
 			}
 			let curSelMenu = _.find(datas, item => {
@@ -54,7 +54,7 @@ const CusTree = ({dispatch, datas, selectedKeys}) => {
 					visible: true,
 					curSelMenu,
 					parentMenu,
-					isDetail: true
+					type: 'detail'
 				}
 			})
 		}

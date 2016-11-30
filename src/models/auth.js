@@ -1,6 +1,7 @@
 import { hashHistory } from 'dva/router'
 import {message, notification} from 'antd'
 import {loginSer} from '../services/users'
+import { readValidModules } from '../services/power_module'
 import {Token} from '../utils/constants'
 import _ from 'lodash'
 
@@ -12,41 +13,44 @@ export default {
 		username: '',
 		password: '',
 		remember: true,
-		menus: [
-			{key: '1001',	name: '首页',	icon: 'home',	url: '/'},
-			{
-				key: '1201',
-				name: '系统管理',
-				icon: 'home',
-				childs:
-				[
-					{key: '1202', name: '菜单管理', url: '/module'}
-				]
-			},
-			{
-				key: '1101',
-				name: '商户管理',
-				icon: 'home',
-				childs:
-				[
-					{key: '1102', name: '商户会员', url: '/cusmbr'},
-					{key: '1102',	name: '微信订阅',	url: '/subscribe'},
-					{key: '1103',	name: '微信消息',	url: '/wxtask'},
-					{key: '1104',	name: '礼品管理',	url: '/vipgift'},
-					{key: '1105',	name: '积分兑换查询',	url: '/vipgiftexch'}
-				]
-			},
-			{key: '1501',	name: '订单管理',	icon: 'android', childs: [{key: '1502',	name: '微信充值订单',	url: '/wxchargeord'}]},
-			// {key: 1301,	name: '百度地图',	icon: 'environment-o', url: '/map'},
-			// {key: 1401,	name: '停车场地图', icon: 'environment-o',	url: '/parkmap'},
-			{key: '9901',	name: 'demo',	icon: 'android', url: '/demo'}
-		],
+		menus: [],
+		isChange: true,
+		// menus: [
+		// 	{key: '1001',	name: '首页',	icon: 'home',	url: '/'},
+		// 	{
+		// 		key: '1201',
+		// 		name: '系统管理',
+		// 		icon: 'home',
+		// 		childs:
+		// 		[
+		// 			{key: '1202', name: '菜单管理', url: '/module'},
+		// 			{key: '1203', name: '微信订单查询', url: '/wxorderadmin'}
+		// 		]
+		// 	},
+		// 	{
+		// 		key: '1101',
+		// 		name: '商户管理',
+		// 		icon: 'home',
+		// 		childs:
+		// 		[
+		// 			{key: '1102', name: '商户会员', url: '/cusmbr'},
+		// 			{key: '1103',	name: '微信订阅',	url: '/subscribe'},
+		// 			{key: '1104',	name: '微信消息',	url: '/wxtask'},
+		// 			{key: '1105',	name: '礼品管理',	url: '/vipgift'},
+		// 			{key: '1106',	name: '积分兑换查询',	url: '/vipgiftexch'}
+		// 		]
+		// 	},
+		// 	{key: '1501',	name: '订单管理',	icon: 'android', childs: [{key: '1502',	name: '微信充值订单',	url: '/wxchargeord'}]},
+		// 	// {key: 1301,	name: '百度地图',	icon: 'environment-o', url: '/map'},
+		// 	// {key: 1401,	name: '停车场地图', icon: 'environment-o',	url: '/parkmap'},
+		// 	{key: '9901',	name: 'demo',	icon: 'android', url: '/demo'}
+		// ],
 		defaultMenu: [],
 		leftMenu: {},
 		defaultLeftMenu: []
 	},
 	subscriptions: {
-		setup ({dispatch,	history}) {
+		setup ({dispatch, state, history}) {
 			history.listen(location => {
 				if (location.pathname === '/login') {
 					let remember = window.localStorage.getItem('remember')
@@ -59,9 +63,10 @@ export default {
 						}
 					})
 				}
-
+				// if (location.pathname === '/') {
+				// }
 				let path = location.pathname
-				dispatch({type: 'changeLeftMenu', payload: {path}})
+				dispatch({type: 'changeLeft', payload: {path}})
 			})
 		}
 	},
@@ -86,9 +91,41 @@ export default {
 				message.success('登陆失败，请检查用户名或密码', 3)
 			}
 		},
+		*getModules ({payload}, {call, put}) {
+			const data = yield call(readValidModules, payload)
+			if (data) {
+				let treeNodes = []
+				let rootNodes = _.filter(data, item => item.pid === 0)
+				rootNodes.map(item => {
+					let childNodes = []
+					let childs = _.filter(data, child => child.pid === item.id)
+					childs.map(child => {
+						childNodes.push({
+							key: child.id + '',
+							name: child.name,
+							icon: child.icon,
+							url: child.url
+						})
+					})
+					treeNodes.push({
+						key: item.id + '',
+						name: item.name,
+						icon: item.icon,
+						childs: childNodes
+					})
+				})
+				yield put({type: 'uptState', payload: {menus: treeNodes}})
+				yield put({type: 'changeLeftMenu', payload})
+			} else {
+				yield put({type: 'uptState', payload: {menus: []}})
+			}
+		},
 		logout (state, action) {
 			window.localStorage.removeItem(Token)
 			hashHistory.push({pathname: '/login'})
+		},
+		*changeLeft ({payload}, {call, put}) {
+			yield put({type: 'getModules', payload})
 		}
 	},
 	reducers: {
@@ -115,7 +152,6 @@ export default {
 		},
 		changeLeftMenu (state, action) {
 			let path = action.payload.path
-
 			let left = _.filter(state.menus, chr => {
 				let temp = _.filter(chr.childs, child => {
 					return child.url === path

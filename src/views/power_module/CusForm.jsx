@@ -4,14 +4,14 @@ const { Item } = Form
 const RadioButton = Radio.Button
 const RadioGroup = Radio.Group
 
-const CusForm = ({dispatch, parentMenu = {}, curSelMenu = {}, visible, isDetail, form: {
+const CusForm = ({dispatch, parentMenu = {}, curSelMenu = {}, visible, type, form: {
 	resetFields,
 	getFieldDecorator,
 	validateFields,
 	getFieldsValue
 }}) => {
 	const formItemLayout = {
-		labelCol: {span: 6},
+		labelCol: {span: 4},
 		wrapperCol: {span: 18}
 	}
 	const btnSave = () => {
@@ -20,20 +20,24 @@ const CusForm = ({dispatch, parentMenu = {}, curSelMenu = {}, visible, isDetail,
 				return
 			}
 			const fieldsValue = getFieldsValue()
-			// const rangeDateValue = fieldsValue['rangeDate']
-			// const data = {
-			// 	...getFieldsValue(),
-			// 	vldDays: fieldsValue['vldDays'] ? fieldsValue['vldDays'].format() : undefined,
-			// 	begDate: rangeDateValue[0] ? rangeDateValue[0].format() : undefined,
-			// 	endDate: rangeDateValue[1] ? rangeDateValue[1].format() : undefined,
-			// 	status: fieldsValue['status'] ? 'aa' : 'nn'
-			// }
-			// onOk(data)
-			dispatch({type: 'module/common', payload: {visible: false}})
-			resetFields()
+			const rangeDateValue = fieldsValue['rangeDate']
+			const data = {
+				...getFieldsValue(),
+				id: curSelMenu.id,
+				pid: parentMenu.id || 0,
+				status: fieldsValue['status'] ? 'aa' : 'nn'
+			}
+			if (type === 'edit') {
+				dispatch({type: 'module/update', payload: {...data, type: 'detail', curSelMenu: {...data}}})
+			} else {
+				dispatch({type: 'module/create', payload: {...data, visible: false}})
+			}
+			dispatch({type: 'auth/getModules'})
 		})
 	}
-
+	parentMenu = parentMenu || {}
+	const isDetail = type === 'detail'
+	const isRootMenu = parentMenu.id === 0
 	return (
 		<Form horizontal>
 			{
@@ -50,15 +54,18 @@ const CusForm = ({dispatch, parentMenu = {}, curSelMenu = {}, visible, isDetail,
 								]
 							})(<Input type='text'/>)}
 					</Item>
-					<Item label='菜单地址：' {...formItemLayout}>
-						{
-							isDetail ? <label>{curSelMenu.url}</label> : getFieldDecorator('url', {
-								initialValue: curSelMenu.url,
-								rules: [
-									{required: true, message: '菜单地址不能为空'}
-								]
-							})(<Input type='text'/>)}
-					</Item>
+					{
+						isRootMenu ? ''
+						:	<Item label='菜单地址：' {...formItemLayout}>
+								{
+									isDetail ? <label>{curSelMenu.url}</label> : getFieldDecorator('url', {
+										initialValue: curSelMenu.url,
+										rules: [
+											{required: true, message: '菜单地址不能为空'}
+										]
+									})(<Input type='text'/>)}
+							</Item>
+					}
 					<Item label='菜单图标：' {...formItemLayout}>
 						{
 							isDetail ? <Icon type={curSelMenu.icon}></Icon> : getFieldDecorator('icon', {
