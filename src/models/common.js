@@ -1,4 +1,5 @@
 import {readDictItems} from '../services/common'
+import { readCus } from '../services/plat_cus'
 import {message} from 'antd'
 
 export default {
@@ -6,7 +7,8 @@ export default {
 	state: {
 		pageSize: 10,
 		giftTypes: [],
-		getWays: []
+		getWays: [],
+		cus: []
 	},
 	// 界面加载完成时调用
 	subscriptions: {
@@ -28,6 +30,14 @@ export default {
 				yield put({type: 'uptState', payload: {getWays: data}})
 			} else {
 				yield put({type: 'uptState', payload: {getWays: []}})
+			}
+		},
+		*getCusItems ({payload}, {call, put}) {
+			const data = yield call(readCus)
+			if (data) {
+				yield put({type: 'uptState', payload: {cus: data}})
+			} else {
+				yield put({type: 'uptState', payload: {cus: []}})
 			}
 		}
 	},

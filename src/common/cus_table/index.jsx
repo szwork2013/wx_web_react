@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import {Table} from 'antd'
 
-const CusTable = ({columns, total, current, loading, pageSize, dataSource, onPageChange, rowKey}) => {
+const CusTable = ({columns, total, current, loading, pageSize, dataSource, onPageChange, rowKey, expandedRowRender}) => {
 	const pagination = {
 		total,
 		pageSize: pageSize | 10,
@@ -16,6 +16,7 @@ const CusTable = ({columns, total, current, loading, pageSize, dataSource, onPag
 	return (
 		<div>
 			<Table
+				expandedRowRender={expandedRowRender}
 				columns={columns}
 				dataSource={dataSource}
 				loading={loading}

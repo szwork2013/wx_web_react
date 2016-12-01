@@ -76,11 +76,11 @@ const VipGift = ({dispatch, gift, common}) => {
 		visible: modalVisible,
 		onOk (data) {
 			if (modalType === 'edit') {
-					dispatch({type: 'gift/update',
-						payload: {
-							pageSize,
-							...data
-						}})
+				dispatch({type: 'gift/update',
+					payload: {
+						pageSize,
+						...data
+					}})
 			} else {
 				dispatch({type: 'gift/create',
 					payload: {

@@ -157,6 +157,15 @@ export default ({ history, app }) => {
 					}
 				},
 				{
+					path: '/account',
+					getComponent (nextState, cb) {
+						require.ensure([], (require) => {
+							app.model(require('./models/account'))
+							cb(null, require('./views/account'))
+						})
+					}
+				},
+				{
 					path: '*',
 					getComponent (nextState, cb) {
 						require.ensure([], (require) => {

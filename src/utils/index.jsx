@@ -1,5 +1,5 @@
 import moment from 'moment'
-
+import { message } from 'antd'
 
 /**
  * format
@@ -80,6 +80,35 @@ export function formatGiftExchStatus (origin) {
 }
 
 /**
+ * format
+ * 账户状态码转换
+ * @export
+ * @param {any} origin
+ * @returns
+ */
+export function formatAccountStatus (origin) {
+	if (origin === 'aa')	return '启用'
+	else if (origin === 'nn')	return '停用'
+	else return origin
+}
+
+
+/**
+ * format
+ * 模态框标题转换
+ * @export
+ * @param {any} origin
+ * @param {any} names
+ * @returns
+ */
+export function formatModalName (origin, ...names) {
+	if (origin === 'create')	return names[0] || '新增'
+	else if (origin === 'edit')	return names[1] || '编辑'
+	else if (origin === 'detail')	return names[2] || '详情'
+	else return 'Modal'
+}
+
+/**
  * file
  * 获取文件名称
  * @export
@@ -91,4 +120,37 @@ export function getFileName (origin) {
 	let name = origin.replace(/(.*\/)*([^.]+).*/ig, '$2')
 	let type = origin.replace(/.+\./, '')
 	return `${name}.${type}`
+}
+
+/**
+ * message
+ * 成功消息
+ * @export
+ * @param {any} content
+ * @param {number} [time=3]
+ */
+export function successBox (content, time = 3) {
+	message.success(content, time)
+}
+
+/**
+ * message
+ * 错误消息
+ * @export
+ * @param {any} content
+ * @param {number} [time=3]
+ */
+export function errorBox (content, time = 3) {
+	message.error(content, time)
+}
+
+/**
+ * message
+ * 警告消息
+ * @export
+ * @param {any} content
+ * @param {number} [time=3]
+ */
+export function warnBox (content, time = 3) {
+	message.warn(content, time)
 }
