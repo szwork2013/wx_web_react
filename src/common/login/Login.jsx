@@ -26,6 +26,7 @@ const Login = ({auth, dispatch, form: {getFieldDecorator, validateFields, getFie
 			dispatch({type: 'auth/login',
 				payload: {
 					username: fieldsValue['username'] || '',
+					accountName: fieldsValue['username'] || '',
 					password: fieldsValue['password'] || '',
 					remember: fieldsValue['remember'] || false
 				}})
@@ -41,13 +42,13 @@ const Login = ({auth, dispatch, form: {getFieldDecorator, validateFields, getFie
 							{getFieldDecorator('username', {
 								initialValue: username,
 								rules: [{required: true, message: '用户名不能为空'}]
-							})(<Input addonBefore={< Icon type = 'user' />} placeholder='用户名'/>)}
+							})(<Input addonBefore={< Icon type = 'user' />} placeholder='用户名' autoComplete='off'/>)}
 						</FormItem>
 						<FormItem>
 							{getFieldDecorator('password', {
 								initialValue: password,
 								rules: [{required: true, message: '密码不能为空'}]
-							})(<Input addonBefore={< Icon type = 'lock' />} type='password' placeholder='密码'/>)}
+							})(<Input addonBefore={< Icon type = 'lock' />} type='password' placeholder='密码' autoComplete='off'/>)}
 						</FormItem>
 						<FormItem>
 							{getFieldDecorator('remember', {valuePropName: 'checked', initialValue: remember === 'true'})(<Checkbox>记住密码</Checkbox>)}

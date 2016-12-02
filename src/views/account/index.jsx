@@ -5,7 +5,7 @@ import CusSearch from './CusSearch'
 import CusModal from './CusModal'
 
 const Account = ({dispatch, account, common}) => {
-	const { total, page, pageSize, datas, loading, modalVisible, modalType } = account
+	const { total, page, pageSize, datas, loading, modalVisible, modalType, accountVldStatus, mobileVldStatus, current } = account
 	const { cus } = common
 
 	const searchProps = {
@@ -23,7 +23,10 @@ const Account = ({dispatch, account, common}) => {
 		dispatch,
 		modalVisible,
 		modalType,
-		cus
+		cus,
+		accountVldStatus,
+		mobileVldStatus,
+		current: modalType === 'create' ? {} : (current || {})
 	}
 
 	return (

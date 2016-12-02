@@ -1,8 +1,9 @@
 import { hashHistory } from 'dva/router'
 import {message, notification} from 'antd'
-import {loginSer} from '../services/users'
+// import {loginSer} from '../services/users'
 import { readValidModules } from '../services/power_module'
 import {Token} from '../utils/constants'
+import { standardLogin } from '../services/account';
 import _ from 'lodash'
 
 export default {
@@ -75,7 +76,8 @@ export default {
 			// const hide = message.loading('登陆中...', 0);
 			yield put({type: 'logining', payload})
 
-			const data = yield call(loginSer, payload)
+			const data = yield call(standardLogin, payload)
+			console.log(data);
 			// hide()
 			if (data) {
 				notification['success']({

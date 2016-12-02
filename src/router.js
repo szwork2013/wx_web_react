@@ -4,7 +4,7 @@ import {Token} from './utils/constants'
 
 export default ({ history, app }) => {
 	function requireAuth (nextState, replace) {
-		if (!window.localStorage.getItem(Token) && nextState.location.pathname !== '/login') {
+		if (!window.localStorage.getItem(Token) && !window.localStorage.getItem('remember') && nextState.location.pathname !== '/login') {
 			replace({
 				pathname: '/login'
 			})

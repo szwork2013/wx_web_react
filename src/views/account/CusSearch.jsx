@@ -34,7 +34,7 @@ const CusSearch = ({dispatch, form, form: {
 				<FormItem label='手机号：'>
 					{getFieldDecorator('mobile')(<Input type='text'/>)}
 				</FormItem>
-				<FormItem label='礼品类别：'>
+				<FormItem label='状态：'>
 					{getFieldDecorator('status', {initialValue: ''})(
 						<Select style={{width: 100}}>
 							<Option value=''>全部</Option>

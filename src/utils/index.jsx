@@ -154,3 +154,29 @@ export function errorBox (content, time = 3) {
 export function warnBox (content, time = 3) {
 	message.warn(content, time)
 }
+
+/**
+ * message
+ * 加载消息
+ * @export
+ * @param {any} content
+ */
+export function loadingBox (content) {
+	return message.loading(content, 0)
+}
+
+
+/**
+ * valid
+ * 手机号验证
+ * @export
+ * @param {any} phone
+ * @returns
+ */
+export function checkPhone (phone) {
+	if (!(/^1[34578]\d{9}$/.test(phone))) { 
+		return false
+	} else {
+		return true
+	}
+}
