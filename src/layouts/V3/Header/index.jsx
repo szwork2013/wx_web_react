@@ -15,7 +15,7 @@ const MenuItem = Menu.Item
 // </Tabs>
 
 
-const Header = ({auth, onMenuClick}) => {
+const Header = ({dispatch, auth, onMenuClick}) => {
 	const {menus, defaultMenu} = auth
 
 	let TopMenu = menus.map(item => {
@@ -27,8 +27,9 @@ const Header = ({auth, onMenuClick}) => {
 	})
 
 	const menuProps = {
-		defaultSelectedKeys: defaultMenu,
+		selectedKeys: defaultMenu,
 		onClick (key) {
+			dispatch({type: 'auth/uptState', payload: {defaultMenu: key.key}})
 			let left = _.filter(menus, chr => {
 				return chr.key === key.key
 			})

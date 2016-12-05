@@ -4,7 +4,7 @@ import {Token} from './utils/constants'
 
 export default ({ history, app }) => {
 	function requireAuth (nextState, replace) {
-		if (!window.localStorage.getItem(Token) && !window.localStorage.getItem('remember') && nextState.location.pathname !== '/login') {
+		if (!window.localStorage.getItem(Token) && nextState.location.pathname !== '/login') {
 			replace({
 				pathname: '/login'
 			})
@@ -51,8 +51,8 @@ export default ({ history, app }) => {
 			path: '/',
 			getComponent (nextState, cb) {
 				require.ensure([], (require) => {
-					app.model(require('./models/common'))
 					app.model(require('./models/auth'))
+					app.model(require('./models/common'))
 					cb(null, require('./layouts/V3/App'))
 				})
 			},
@@ -112,6 +112,7 @@ export default ({ history, app }) => {
 					}
 				},
 				{
+					onEnter: requireAuth,
 					path: '/wxchargeord',
 					getComponent (nextState, cb) {
 						require.ensure([], (require) => {
@@ -121,6 +122,7 @@ export default ({ history, app }) => {
 					}
 				},
 				{
+					onEnter: requireAuth,
 					path: '/vipgift',
 					getComponent (nextState, cb) {
 						require.ensure([], (require) => {
@@ -130,6 +132,7 @@ export default ({ history, app }) => {
 					}
 				},
 				{
+					onEnter: requireAuth,
 					path: '/vipgiftexch',
 					getComponent (nextState, cb) {
 						require.ensure([], (require) => {
@@ -139,6 +142,7 @@ export default ({ history, app }) => {
 					}
 				},
 				{
+					onEnter: requireAuth,
 					path: '/module',
 					getComponent (nextState, cb) {
 						require.ensure([], (require) => {
@@ -148,6 +152,7 @@ export default ({ history, app }) => {
 					}
 				},
 				{
+					onEnter: requireAuth,
 					path: '/wxorderadmin',
 					getComponent (nextState, cb) {
 						require.ensure([], (require) => {
@@ -157,6 +162,7 @@ export default ({ history, app }) => {
 					}
 				},
 				{
+					onEnter: requireAuth,
 					path: '/account',
 					getComponent (nextState, cb) {
 						require.ensure([], (require) => {

@@ -1,6 +1,6 @@
 import {readDictItems} from '../services/common'
-import { readCus } from '../services/plat_cus'
-import {message} from 'antd'
+import { readCus, readMyCus } from '../services/plat_cus'
+import _ from 'lodash'
 
 export default {
 	namespace: 'common',
@@ -8,11 +8,18 @@ export default {
 		pageSize: 10,
 		giftTypes: [],
 		getWays: [],
-		cus: []
+		cus: [],
+		myCus: null
 	},
 	// 界面加载完成时调用
 	subscriptions: {
-
+		setup ({dispatch, state, history}) {
+			history.listen(location => {
+				if (location.pathname === '/') {
+					dispatch({type: 'getMyCus'})
+				}
+			})
+		}
 	},
 	// 异步方法
 	effects: {
@@ -38,6 +45,15 @@ export default {
 				yield put({type: 'uptState', payload: {cus: data}})
 			} else {
 				yield put({type: 'uptState', payload: {cus: []}})
+			}
+		},
+		*getMyCus ({payload}, {call, put}) {
+			const data = yield call(readMyCus)
+			if (data) {
+				let first = _.first(data)
+				yield put({type: 'uptState', payload: {myCus: first}})
+			} else {
+				yield put({type: 'uptState', payload: {myCus: null}})
 			}
 		}
 	},

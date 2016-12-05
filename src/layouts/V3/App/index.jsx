@@ -11,6 +11,7 @@ import FreeScrollBar from 'react-free-scrollbar'
 
 const App = ({children, dispatch, auth}) => {
 	const headerProps = {
+		dispatch,
 		onMenuClick (left, defaultLeft) {
 			dispatch({type: 'auth/uptState',
 				payload: {

@@ -29,7 +29,6 @@ const Sidebar = ({leftMenu, defaultLeftMenu, onMenuClick}) => {
 			)
 		})
 	}
-
 	const menuProps = {
 		selectedKeys: defaultLeftMenu,
 		onClick (key) {
